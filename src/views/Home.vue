@@ -1,16 +1,17 @@
 <template>
-  <div>
-    <Icon/>
-  </div>
+<div>
+  <Store/>
+</div>
+
 </template>
 
 <script>
 // @ is an alias to /src
-import Icon from '@/components/Icon.vue'
+import Store from '@/components/Store.vue'
 
 export default {
   components: {
-    Icon
+    Store
   }
 }
 </script>

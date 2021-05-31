@@ -25,7 +25,7 @@
     padding: 30px 0 35px;
     background-color: rgb(0, 162, 255);
     border-radius: 10px;
-    box-shadow: 3px 3px 0 0 rrgba(0, 34, 97, 0.5)
+    box-shadow: 3px 3px 0 0 rgba(0, 34, 97, 0.5)
   }
 
   .icon span {

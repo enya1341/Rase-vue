@@ -64,12 +64,12 @@ export default {
   display: table;
   width:80%;
   margin:0 auto;
-  padding-top:30px;
+  padding-top:10px;
 }
 
 img{
-  width:50px;
-  height:50px;
+  width:30px;
+  height:30px;
 }
 
 .leftflex{
@@ -81,7 +81,7 @@ img{
 }
 
 .leftflex h1{
-  margin:20px auto;
+  margin:10px auto;
 }
 
 .flex {
@@ -91,12 +91,12 @@ img{
 
 .reservation-data{
   display: table;
-  width:75%;
-  margin:30px auto;
+  width:80%;
+  margin:10px auto;
 }
 
 .data{
-  margin:30px 0;
+  margin:20px 0;
 }
 
 .data th{

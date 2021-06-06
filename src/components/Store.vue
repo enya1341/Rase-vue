@@ -1,7 +1,7 @@
 <template>
   <div id="store">
     <div class="box">
-      <img :src="this.parentStore.img" alt="">
+      <img :src="this.parentStore.img">
       <div class="bottom-box">
         <h1>{{this.parentStore.name}}</h1>
         <h3>#{{this.parentStore.region}} #{{this.parentStore.genre}}</h3>
@@ -35,7 +35,7 @@ export default {
     storedetail(){
       this.$router.push({
         name: 'StoreDetail',
-        params: { id: this.parebtStore.id }
+        params: { id: this.parentStore.id }
       })
     }
   }
@@ -46,8 +46,8 @@ export default {
 <style scoped>
 
 .box {
-  width:250px;
-  height:150px;
+  width:100%;
+  height:240px;
   background-color: white;
   border-radius: 10px;
   
@@ -55,12 +55,13 @@ export default {
 
 .box img {
   width:100%;
-  height:80%;
+  height:60%;
 
 }
 
 .bottom-box{
   background-color: white;
+  height:50%;
   padding:10px 15px;
   color:black;
 }

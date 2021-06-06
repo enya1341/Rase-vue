@@ -1,10 +1,10 @@
 <template>
   <div id="store">
     <div class="box">
-      <img :src="this.store.img" alt="">
+      <img :src="this.parentStore.img" alt="">
       <div class="bottom-box">
-        <h1>{{this.store.name}}</h1>
-        <h3>#{{this.store.region}} #{{this.store.genre}}</h3>
+        <h1>{{this.parentStore.name}}</h1>
+        <h3>#{{this.parentStore.region}} #{{this.parentStore.genre}}</h3>
         <div class="flex">
           <button @click="storedetail">詳しくみる</button>
           <img src="../assets/heartin.png" alt="">
@@ -18,23 +18,24 @@
 // @ is an alias to /src
 
 export default {
-  data() {
-    return {
-      store:{
-        id:0,
-        name:"仙人",
-        region:"東京都",
-        genre:"寿司",
-        img:require("../assets/store/1.jpg")
-      },
-    };
-  },
+  props: ["parentStore"],
+  // data() {
+  //   return {
+  //     store:{
+  //       id:0,
+  //       name:"仙人",
+  //       region:"東京都",
+  //       genre:"寿司",
+  //       img:require("../assets/store/1.jpg")
+  //     },
+  //   };
+  // },
   
   methods:{
     storedetail(){
       this.$router.push({
         name: 'StoreDetail',
-        params: { id: this.store.id }
+        params: { id: this.parebtStore.id }
       })
     }
   }
@@ -45,22 +46,22 @@ export default {
 <style scoped>
 
 .box {
-  width:400px;
-  height:400px;
+  width:250px;
+  height:150px;
   background-color: white;
   border-radius: 10px;
-  box-shadow: 3px 3px 0 0 rgba(0, 34, 97, 0.5)
+  
 }
 
 .box img {
   width:100%;
-  height:50%;
-  border-radius: 10px;
+  height:80%;
+
 }
 
 .bottom-box{
   background-color: white;
-  padding:20px 30px;
+  padding:10px 15px;
   color:black;
 }
 
@@ -76,8 +77,8 @@ export default {
 }
 
 .bottom-box img{
-  width:50px;
-  margin:20px;
+  width:30px;
+  margin:15px;
 }
 
 button {
@@ -89,7 +90,7 @@ button {
   background-color: #2f00ff;
   border-radius: 10px;
   cursor: pointer;
-  margin-top:30px;
+  margin-top:10px;
 }
 
 .flex {

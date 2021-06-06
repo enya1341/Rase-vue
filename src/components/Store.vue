@@ -18,7 +18,7 @@
 // @ is an alias to /src
 
 export default {
-    data() {
+  data() {
     return {
       store:{
         id:0,
@@ -34,7 +34,7 @@ export default {
     storedetail(){
       this.$router.push({
         name: 'StoreDetail',
-        params: { id: this.store[0].id }
+        params: { id: this.store.id }
       })
     }
   }

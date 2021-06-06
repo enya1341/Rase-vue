@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+import Home from '../views/Home.vue'
 import Login from '../views/Login.vue'
 import MyPage from '../views/MyPage.vue'
 import Register from '../views/Register.vue'
@@ -22,6 +23,11 @@ const routes = [
     component: Login
   },
   {
+    path: '/home',
+    name: 'Home',
+    component: Home
+  },
+  {
     path: '/mypage',
     name: 'MyPage',
     component: MyPage
@@ -37,7 +43,7 @@ const routes = [
     component: Reservation
   },
   {
-    path: '/storedetail',
+    path: '/storedetail/:id',
     name: 'StoreDetail',
     component: StoreDetail
   },

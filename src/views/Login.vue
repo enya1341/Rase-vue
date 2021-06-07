@@ -1,28 +1,32 @@
 <template>
   <div id="login">
-    <Icon/>
+    <HeaderIcon/>
     <div class="box">
+
       <div class="top-box">
         <h1>Login</h1>
       </div>
+
       <div class="buttom-box">
         <div class="form flex">
-          <p>仮置き</p>
+          <img src="../assets/mail.png" width="32px">
           <input placeholder="Email" type="email" v-model="email" />
         </div>
         <div class="form flex">
-          <p>仮置き</p>
+          <img src="../assets/password.png" width="32px">
           <input placeholder="Password" type="password" v-model="password" />
         </div>
         <button @click="auth">ログイン</button>
       </div>
+
     </div>
   </div>
 </template>
 
 <script>
-// @ is an alias to /src
-import Icon from '@/components/Icon.vue'
+
+/** Headerの会社ロゴのコンポーネント */
+import HeaderIcon from '@/components/HeaderIcon.vue'
 
 export default {
   data() {
@@ -32,7 +36,7 @@ export default {
     };
   },
   components: {
-    Icon
+    HeaderIcon
   }
 }
 </script>
@@ -46,6 +50,10 @@ export default {
   background-color:rgb(206, 206, 206);
   height:100vh;
   width:100%;
+}
+
+.flex {
+  display: flex;
 }
 
 .box {
@@ -77,6 +85,10 @@ export default {
 .form p{
   color:black;
   margin-right:15px;
+}
+
+.form img{
+  margin-right:10px;
 }
 
 input {

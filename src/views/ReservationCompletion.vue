@@ -1,20 +1,27 @@
 <template>
   <div id="thankyou">
-    <HeaderIcon/>
+    <Icon/>
     <div class="box">
-      <h1>会員登録ありがとうございます</h1>
-      <button @click="auth">ログイン</button>
+      <h1>ご予約ありがとうございます</h1>
+      <button @click="back">戻る</button>
     </div>
   </div>
 </template>
 
 <script>
-/** Headerの会社ロゴのコンポーネント */
-import HeaderIcon from '@/components/HeaderIcon.vue'
+
+import Icon from '@/components/HeaderIcon.vue'
 
 export default {
   components: {
-    HeaderIcon
+    Icon
+  },
+  methods:{
+    back(){
+      this.$router.push({
+        name: 'StoreList',
+      })
+    }
   }
 }
 </script>

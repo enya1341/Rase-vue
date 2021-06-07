@@ -4,7 +4,7 @@ import Login from '../views/Login.vue'
 import MyPage from '../views/MyPage.vue'
 import Register from '../views/Register.vue'
 import Thankyou from '../views/Thankyou.vue'
-import Reservation from '../views/Reservation.vue'
+import ReservationCompletion from '../views/ReservationCompletion.vue'
 import StoreDetail from '../views/StoreDetail.vue'
 import StoreList from '../views/StoreList.vue'
 
@@ -33,11 +33,11 @@ const routes = [
   },
   {
     path: '/reservation',
-    name: 'Reservation',
-    component: Reservation
+    name: 'ReservationCompletion',
+    component: ReservationCompletion
   },
   {
-    path: '/storedetail',
+    path: '/storedetail/:id',
     name: 'StoreDetail',
     component: StoreDetail
   },

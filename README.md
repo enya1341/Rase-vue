@@ -1,24 +1,46 @@
 # rase-vue
 
-## Project setup
-```
-yarn install
-```
 
-### Compiles and hot-reloads for development
-```
-yarn serve
-```
+※一覧は基本ファイル順
 
-### Compiles and minifies for production
-```
-yarn build
-```
+ページ一覧
+・ログインページ
+・マイページ
+・ユーザー登録ページ
+・予約完了ページ
+・飲食店詳細ページ
+・飲食店一覧ページ
+・ユーザー登録完了ページ
 
-### Lints and fixes files
-```
-yarn lint
-```
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+
+コンポーネント一覧
+・HeaderIcon(企業アイコン）
+・Reservation（予約データ表示）
+・Store(ストアデータ表示)
+
+
+
+機能一覧
+・ログインページ
+　ログイン機能※未実装
+
+・マイページ
+  ユーザーネーム表示
+  予約データ表示(コンポーネント)
+  ストアデータ表示(コンポーネント)
+
+・ユーザー登録ページ
+  ユーザーデータ送信※未実装
+
+・予約完了ページ
+
+・飲食店詳細ページ
+  予約機能※未実装
+  ストアデータ表示
+
+・飲食店一覧ページ
+  ストア一覧表示
+  検索機能※未実装
+
+・ユーザー登録完了ページ

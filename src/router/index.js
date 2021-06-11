@@ -24,27 +24,43 @@ const routes = [
   {
     path: '/mypage',
     name: 'MyPage',
-    component: MyPage
+    component: MyPage,
+    meta: {
+      requiresAuth: true,
+    },
   },
   {
     path: '/thankyou',
     name: 'Thankyou',
-    component: Thankyou
+    component: Thankyou,
+    meta: {
+      requiresAuth: true,
+    },
   },
   {
     path: '/reservation',
     name: 'ReservationCompletion',
-    component: ReservationCompletion
+    component: ReservationCompletion,
+    meta: {
+      requiresAuth: true,
+    },
   },
   {
     path: '/storedetail/:id',
     name: 'StoreDetail',
-    component: StoreDetail
+    component: StoreDetail,
+    meta: {
+      requiresAuth: true,
+    },
+
   },
   {
     path: '/storelist',
     name: 'StoreList',
-    component: StoreList
+    component: StoreList,
+    meta: {
+      requiresAuth: true,
+    },
   }
 ]
 
@@ -53,5 +69,21 @@ const router = new VueRouter({
   base: process.env.BASE_URL,
   routes
 })
+
+router.beforeEach((to, from, next) => {
+  if (
+    to.matched.some((record) => record.meta.requiresAuth) &&
+    !store.state.auth
+  ) {
+    next({
+      path: "/",
+      query: {
+        redirect: to.fullPath,
+      },
+    });
+  } else {
+    next();
+  }
+});
 
 export default router

@@ -37,6 +37,14 @@ export default {
   },
   components: {
     HeaderIcon
+  },
+  methods: {
+    auth() {
+      this.$store.dispatch("login", {
+        email: this.email,
+        password: this.password
+      });
+    }
   }
 }
 </script>

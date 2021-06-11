@@ -20,7 +20,7 @@
           <img src="../assets/password.png" width="32px">
           <input placeholder="Password" type="password" v-model="password" />
         </div>
-        <button @click="auth">ログイン</button>
+        <button @click="auth">登録</button>
       </div>
 
     </div>
@@ -34,15 +34,33 @@ import HeaderIcon from '@/components/HeaderIcon.vue'
 export default {
   data() {
     return {
-      username: "",
+      name: "",
       email: "",
       password: ""
     };
   },
   components: {
     HeaderIcon
+  },
+  methods: {
+    auth() {
+      axios
+        .post("herokuのURL/api/v1/users/register", {
+          name: this.name,
+          email: this.email,
+          password: this.password
+        })
+        .then(response => {
+          console.log(response);
+          this.$router.replace("/mypage");
+        })
+        .catch(error => {
+          alert(error);
+        });
+    }
   }
 }
+
 </script>
 
 <style scoped>

@@ -10,7 +10,7 @@
       <div class="buttom-box">
         <div class="form flex">
           <img src="../assets/user.png" width="32px">
-          <input placeholder="Username" type="username" v-model="username" />
+          <input placeholder="Username" type="text" v-model="name" />
         </div>        
         <div class="form flex">
           <img src="../assets/mail.png" width="32px">
@@ -30,6 +30,7 @@
 <script>
 /** Headerの会社ロゴのコンポーネント */
 import HeaderIcon from '@/components/HeaderIcon.vue'
+import axios from "axios";
 
 export default {
   data() {
@@ -45,14 +46,14 @@ export default {
   methods: {
     auth() {
       axios
-        .post("herokuのURL/api/v1/users/register", {
+        .post("https://limitless-shore-94245.herokuapp.com/api/v1/users/registration", {
           name: this.name,
           email: this.email,
           password: this.password
         })
         .then(response => {
           console.log(response);
-          this.$router.replace("/mypage");
+          this.$router.push("/thankyou");
         })
         .catch(error => {
           alert(error);

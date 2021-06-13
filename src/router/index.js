@@ -7,6 +7,7 @@ import Thankyou from '../views/Thankyou.vue'
 import ReservationCompletion from '../views/ReservationCompletion.vue'
 import StoreDetail from '../views/StoreDetail.vue'
 import StoreList from '../views/StoreList.vue'
+import store from "../store/index";
 
 Vue.use(VueRouter)
 
@@ -33,9 +34,6 @@ const routes = [
     path: '/thankyou',
     name: 'Thankyou',
     component: Thankyou,
-    meta: {
-      requiresAuth: true,
-    },
   },
   {
     path: '/reservation',
@@ -76,7 +74,7 @@ router.beforeEach((to, from, next) => {
     !store.state.auth
   ) {
     next({
-      path: "/",
+      path: "/register",
       query: {
         redirect: to.fullPath,
       },

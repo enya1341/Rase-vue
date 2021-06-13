@@ -37,6 +37,8 @@ import HeaderIcon from '@/components/HeaderIcon.vue'
 /** storeデータ画像のコンポーネント */
 import Store from '@/components/Store.vue'
 
+
+
 export default {
   data(){
     return{

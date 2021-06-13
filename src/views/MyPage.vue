@@ -35,28 +35,16 @@ import Store from '@/components/Store.vue'
 /** 予約データ画像のコンポーネント */
 import Reservation from '@/components/Reservation.vue'
 
+
+import axios from "axios";
+
 export default {
   data(){
     return{
 
       username:"test",
 
-      storedata:[
-      {
-        id:0,
-        name:"仙人",
-        region:"東京都",
-        genre:"寿司",
-        img:require("../assets/store/0.jpg")
-      },
-      {
-        id:1,
-        name:"牛助",
-        region:"大阪府",
-        genre:"焼肉",
-        img:require("../assets/store/1.jpg")
-      }
-      ]
+      storedata:[]
 
     }
   },
@@ -65,7 +53,21 @@ export default {
     HeaderIcon,
     Store,
     Reservation
-  }
+  },
+
+    // --------------------- //
+    //     データの取得      //
+    // --------------------- //
+  methods: {
+    storedatain(){
+      axios.get("https://limitless-shore-94245.herokuapp.com/api/v1/stores").then((response) => {this.storedata =response.data})
+    }
+  },
+
+
+  created() {
+    this.storedatain();
+  },
 }
 </script>
 

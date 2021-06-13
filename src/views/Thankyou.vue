@@ -12,9 +12,16 @@
 /** Headerの会社ロゴのコンポーネント */
 import HeaderIcon from '@/components/HeaderIcon.vue'
 
+
 export default {
   components: {
     HeaderIcon
+  },
+  methods: {
+    auth() {
+      
+      this.$router.push("/");
+    }
   }
 }
 </script>

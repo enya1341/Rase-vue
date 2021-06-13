@@ -29,14 +29,14 @@ export default new Vuex.Store({
   actions: {
     async login({ commit }, { email, password }) {
       const responseLogin = await axios.post(
-        "herokuのURL/api/v1/users/login",
+        "https://limitless-shore-94245.herokuapp.com/api/v1/users/login",
         {
           email: email,
           password: password,
         }
       );
       const responseUser = await axios.get(
-        "herokuのURL/api/v1/users" ,
+        "https://limitless-shore-94245.herokuapp.com/api/v1/users" ,
         {
           params: {
             email: email,
@@ -45,11 +45,11 @@ export default new Vuex.Store({
       );
       commit("auth", responseLogin.data.auth);
       commit("user", responseUser.data.data[0]);
-      router.replace("/");
+      router.replace("/mypage");
     },
     logout({ commit }) {
       axios
-        .post("herokuのURL/api/v1/users/logout", {
+        .post("https://limitless-shore-94245.herokuapp.com/api/v1/users/logout", {
           auth: this.state.auth,
         })
         .then((response) => {

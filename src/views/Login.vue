@@ -16,7 +16,10 @@
           <img src="../assets/password.png" width="32px">
           <input placeholder="Password" type="password" v-model="password" />
         </div>
-        <button @click="auth">ログイン</button>
+        <div class="buttonflex">
+          <button @click="register">新規登録</button>
+          <button @click="auth">ログイン</button>
+        </div>
       </div>
 
     </div>
@@ -46,9 +49,15 @@ export default {
         email: this.email,
         password: this.password
       });
+    },
+
+    register() {
+      this.$router.push({
+        name: 'Register'
+      })
     }
 
-    
+
   }
 }
 </script>
@@ -111,16 +120,20 @@ input {
   border-bottom:2px solid black;
 }
 
+.buttonflex{
+  display: flex;
+  justify-content: space-between;
+}
 
 button {
-  width: 100px;
+  width: 90px;
   text-align: center;
-  padding: 8px 0 10px;
+  padding: 8px 10px;
   color: #fff;
   background-color: #2f00ff;
   border-radius: 25px;
   cursor: pointer;
-  margin:30px 70% 30px;
+  margin:30px 70px 30px 60px;
 }
 
 </style>

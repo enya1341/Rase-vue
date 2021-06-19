@@ -18,10 +18,13 @@ export default {
     HeaderIcon
   },
   methods: {
+
+    /** そのままログインページへ（ここはいつか修正) */
     auth() {
-      
       this.$router.push("/");
     }
+
+
   }
 }
 </script>

@@ -1,5 +1,6 @@
 <template>
-  <div id="Storelist">
+  <div v-if = "sync" id="Storelist">
+
     <div class="header-flex">
       <div class="header-icon">
         <HeaderIcon/>
@@ -23,10 +24,11 @@
     <div class="store-list">
       <div class="flex">
         <div class="store" v-for="(store,index) in storedata" :key="index">
-          <Store :parentStore="store" />
+          <Store :parentStore="store" :parentFavorite="favoritedata"/>
         </div>
       </div>  
     </div>
+
   </div>
 </template>
 
@@ -37,129 +39,48 @@ import HeaderIcon from '@/components/HeaderIcon.vue'
 /** storeデータ画像のコンポーネント */
 import Store from '@/components/Store.vue'
 
-
+import axios from "axios";
 
 export default {
+
+
   data(){
     return{
+      favoritedata:"",
       username:"test",
-      storedata:[
-      {
-        id:0,
-        name:"仙人",
-        region:"東京都",
-        genre:"寿司",
-        img:require("../assets/store/0.jpg")
-      },
-      {
-        id:1,
-        name:"牛助",
-        region:"大阪府",
-        genre:"焼肉",
-        img:require("../assets/store/1.jpg")
-      },
-      {
-        id:2,
-        name:"牛助",
-        region:"大阪府",
-        genre:"焼肉",
-        img:require("../assets/store/1.jpg")
-      },
-      {
-        id:3,
-        name:"牛助",
-        region:"大阪府",
-        genre:"焼肉",
-        img:require("../assets/store/1.jpg")
-      },
-      {
-        id:4,
-        name:"牛助",
-        region:"大阪府",
-        genre:"焼肉",
-        img:require("../assets/store/1.jpg")
-      }
-      ,
-      {
-        id:5,
-        name:"牛助",
-        region:"大阪府",
-        genre:"焼肉",
-        img:require("../assets/store/1.jpg")
-      },
-      {
-        id:6,
-        name:"牛助",
-        region:"大阪府",
-        genre:"焼肉",
-        img:require("../assets/store/1.jpg")
-      },
-      {
-        id:7,
-        name:"牛助",
-        region:"大阪府",
-        genre:"焼肉",
-        img:require("../assets/store/1.jpg")
-      }
-      ,
-      {
-        id:8,
-        name:"牛助",
-        region:"大阪府",
-        genre:"焼肉",
-        img:require("../assets/store/1.jpg")
-      },
-      {
-        id:9,
-        name:"牛助",
-        region:"大阪府",
-        genre:"焼肉",
-        img:require("../assets/store/1.jpg")
-      },
-      {
-        id:10,
-        name:"牛助",
-        region:"大阪府",
-        genre:"焼肉",
-        img:require("../assets/store/1.jpg")
-      },
-      {
-        id:11,
-        name:"牛助",
-        region:"大阪府",
-        genre:"焼肉",
-        img:require("../assets/store/1.jpg")
-      }
-      ,
-      {
-        id:12,
-        name:"牛助",
-        region:"大阪府",
-        genre:"焼肉",
-        img:require("../assets/store/1.jpg")
-      },
-      {
-        id:13,
-        name:"牛助",
-        region:"大阪府",
-        genre:"焼肉",
-        img:require("../assets/store/1.jpg")
-      },
-      {
-        id:14,
-        name:"牛助",
-        region:"大阪府",
-        genre:"焼肉",
-        img:require("../assets/store/1.jpg")
-      }
-      ]
+      storedata:"",
+      sync:false,
     }
   },
+
 
   components: {
     HeaderIcon,
     Store,
-  }
+  },
+
+
+  methods: {
+
+    /** ストアデータの取得 */
+     storedatain(){
+       /** 全ストアデータの取得 */
+       axios.get("https://limitless-shore-94245.herokuapp.com/api/v1/stores").then((response) => {this.storedata =response.data.data})
+      　/** お気に入りデータを取得 */
+       axios.get("https://limitless-shore-94245.herokuapp.com/api/v1/" + this.$store.state.user.id + "/favorites").then((response) => {this.favoritedata =response.data.data})
+
+        this.sync=true
+      }
+
+
+  },
+
+
+  created() {
+    this.storedatain();
+  },
+
+  
 }
 </script>
 

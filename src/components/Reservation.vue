@@ -7,45 +7,55 @@
           <img src="../assets/clock.png">
           <h1>予約1</h1>
         </div>
-        <img src="../assets/close.png">
+        <img src="../assets/close.png" @click="reservationClose">
       </div>
 
       <div class="reservation-data">
-        <div class="data" v-for="(data,index) in storedata" :key="index">
-          <th>{{data.title}}</th>
-          <td>{{data.storedata}}</td>
+        <div class="data">
+          <th>Shop</th>
+          <td>{{this.parentReservationStoredata.data[0].name}}</td>
+        </div>
+        <div class="data">
+          <th>Date</th>
+          <td>{{this.parentReservationdata.date}}</td>
+        </div>
+        <div class="data">
+          <th>Time</th>
+          <td>{{this.parentReservationdata.time}}</td>
+        </div>
+        <div class="data">
+          <th>Number</th>
+          <td>{{this.parentReservationdata.reservations.number}}人</td>
         </div>
       </div>
+
     </div>
   </div>
 </template>
 
 <script>
 
+import axios from "axios";
 
 export default {
-  data(){
-    return{
-      storedata:[
-        {
-          title:"Shop",
-          storedata:"仙人"
-        },
-        {
-          title:"Date",
-          storedata:"2021-04-01"
-        },
-        {
-          title:"Time",
-          storedata:"17:00"
-        },
-        {
-          title:"Number",
-          storedata:"１人"
-        }
-      ]
-    };
+  
+  props: ["parentReservationdata","parentReservationStoredata"],
+
+  methods:{
+    
+    /** 予約取り消し。とりあえず手動のみ*/
+     reservationClose(){
+       axios({
+              method: "delete",
+              url: "https://limitless-shore-94245.herokuapp.com/api/v1/"+this.$store.state.user.id+"/reservations",
+              data: {
+                reservation_id: this.parentReservationdata.reservations.id
+              }
+        })
+    },
+
   }
+
 }
 </script>
 

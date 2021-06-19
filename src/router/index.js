@@ -50,7 +50,7 @@ const routes = [
     meta: {
       requiresAuth: true,
     },
-
+    props: true,
   },
   {
     path: '/storelist',
@@ -68,13 +68,14 @@ const router = new VueRouter({
   routes
 })
 
+/** ナビゲーションガード*/
 router.beforeEach((to, from, next) => {
   if (
     to.matched.some((record) => record.meta.requiresAuth) &&
     !store.state.auth
   ) {
     next({
-      path: "/register",
+      path: '/',
       query: {
         redirect: to.fullPath,
       },

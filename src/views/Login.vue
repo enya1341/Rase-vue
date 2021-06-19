@@ -39,12 +39,16 @@ export default {
     HeaderIcon
   },
   methods: {
+
+    /** storeに用意していたログイン処理を実行 */
     auth() {
       this.$store.dispatch("login", {
         email: this.email,
         password: this.password
       });
     }
+
+    
   }
 }
 </script>

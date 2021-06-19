@@ -1,5 +1,5 @@
 <template>
-  <div id="storedetail">
+  <div class="storedetail">
 
     <HeaderIcon class="Icon"/>
 
@@ -8,14 +8,14 @@
       <div class="storedata">
         <div class="store-top flex">
           <img src="../assets/next.png" style="transform: scale(-1, 1);" @click="back">
-          <h1>{{this.storedata[$route.params.id].name}}</h1>
+          <h1>{{this.storedata.name}}</h1>
         </div>
-        <img class="store-img" :src="this.storedata[$route.params.id].img">
+        <img class="store-img" :src="this.storedata.image">
         <p class="store-tag">
-          #{{this.storedata[$route.params.id].region}} #{{this.storedata[$route.params.id].genre}}
+          #{{this.storedata.region}} #{{this.storedata.genre}}
         </p>
         <p class="store-contact">
-          {{this.storedata[$route.params.id].content}}
+          {{this.storedata.overview}}
         </p>
       </div>
 
@@ -30,7 +30,7 @@
           <div class="data">
             <tr>
               <th>Shop</th>
-              <td>{{this.storedata[$route.params.id].name}}</td>
+              <td>{{this.storedata.name}}</td>
             </tr>
             <tr>
               <th>Date</th>
@@ -43,6 +43,10 @@
             <tr>
               <th>Number</th>
               <td>{{this.reservationData.number}}人</td>
+            </tr>
+            <tr>
+              <th>datetime</th>
+              <td>{{this.day}}</td>
             </tr>
           </div>
         </div>
@@ -59,38 +63,35 @@
 /** Headerの会社ロゴのコンポーネント */
 import HeaderIcon from '@/components/HeaderIcon.vue'
 
+import axios from "axios";
+
+
+
 export default {
+  
   data(){
     return{
 
       reservationData:{
         date:"",
         time:"",
-        number:""
+        number:"",
+        
       },
 
-      storedata:[
-      {
-        id:0,
-        name:"仙人",
-        region:"東京都",
-        genre:"寿司",
-        img:require("../assets/store/0.jpg"),
-        content:"料理長厳選の食材から作る寿司を用いたコースをぜひお楽しみください。食材・味・価格、お客様の満足度を徹底的に追及したお店です。特別な日のお食事、ビジネス接待まで気軽に使用することができます。"
-      },
-      {
-        id:1,
-        name:"牛助",
-        region:"大阪府",
-        genre:"焼肉",
-        img:require("../assets/store/1.jpg"),
-        content:"焼肉業界で20年間経験を積み、肉を熟知したマスターによる実力派焼肉店。長年の実績とお付き合いをもとに、なかなか食べられない希少部位も仕入れております。また、ゆったりとくつろげる空間はお仕事終わりの一杯や女子会にぴったりです。"
-      },
-      ]
+      day:"",
+
+      storedata:""
 
     }
   },
   methods:{
+  
+    /** ストアの詳細データを取得 */
+    storedatain(){
+      axios.get("https://limitless-shore-94245.herokuapp.com/api/v1/" + this.$route.params.id + "/stores").then((response) => {this.storedata =response.data.data[0]})
+
+    },
 
     /** 企業一覧ページに戻る */
     back(){
@@ -101,22 +102,35 @@ export default {
 
     /** 予約完了ページに戻る */
     reservation(){
+      const day = this.reservationData.date + " " + this.reservationData.time + ":00";
+
+      axios.put("https://limitless-shore-94245.herokuapp.com/api/v1/" + this.$route.params.id + "/reservations",{
+        user_id: this.$store.state.user.id,
+        day: day,
+        number:this.reservationData.number
+      }),
+
       this.$router.push({
         name: 'ReservationCompletion',
       })
-    }
+    },
+
   },
   
   components: {
     HeaderIcon
+  },
+
+  created() {
+    this.storedatain();
   }
 }
 </script>
 
 <style scoped>
 
-#storedetail{
-  background-color:rgb(206, 206, 206);
+.storedetail{
+  background-color:rgb(216, 216, 216);
   height:100vh;
   width:100%;
 }
@@ -145,7 +159,7 @@ export default {
 .store-top h1{
   font-size:28px;
   margin:18px 0 0 10px;
-  color:black;
+  color:rgb(0, 0, 0);
 }
 
 .store-tag{

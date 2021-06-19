@@ -17,11 +17,15 @@ export default {
     Icon
   },
   methods:{
+
+    /** マイページに戻る */
     back(){
       this.$router.push({
-        name: 'StoreList',
+        name: 'MyPage',
       })
     }
+
+
   }
 }
 </script>

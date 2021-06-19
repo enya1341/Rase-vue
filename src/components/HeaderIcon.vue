@@ -1,15 +1,35 @@
 <template>
 <div id="rase-icon">
-  <div class="RaseIcon">
+  <div class="RaseIcon" @click="mypage">
     <span></span>
     <span></span>
     <span></span>
   </div>
-  <h1>Rase</h1>
+  <h1 @click="storelist">Rase</h1>
 </div>
 
 
 </template>
+
+<script>
+export  default{
+  methods:{
+    /** テスト用のページ移動。一々ページ遷移面倒だったので */
+    mypage(){
+      this.$router.push({
+        name: 'MyPage',
+      })
+    },
+    storelist(){
+      this.$router.push({
+        name: 'StoreList',
+      })
+    },
+
+  }
+}
+</script>
+
 
 <style scoped>
 
@@ -17,8 +37,6 @@
     display: flex;
     padding:30px 0 0 30px;
   }
-
-  /* RaseIcon */
 
   .RaseIcon {
     width: 60px;

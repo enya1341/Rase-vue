@@ -28,11 +28,15 @@
 </template>
 
 <script>
+
 /** Headerの会社ロゴのコンポーネント */
 import HeaderIcon from '@/components/HeaderIcon.vue'
+
 import axios from "axios";
 
 export default {
+
+
   data() {
     return {
       name: "",
@@ -40,10 +44,16 @@ export default {
       password: ""
     };
   },
+
+
   components: {
     HeaderIcon
   },
+
+
   methods: {
+
+    /** 会員登録の処理 */
     auth() {
       axios
         .post("https://limitless-shore-94245.herokuapp.com/api/v1/users/registration", {
@@ -59,6 +69,8 @@ export default {
           alert(error);
         });
     }
+
+
   }
 }
 

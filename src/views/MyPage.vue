@@ -1,5 +1,5 @@
 <template>
-  <div v-if="sync && sync2" id="Mypage">
+  <div v-if="sync" id="Mypage">
     <div class="header-icon">
       <HeaderIcon/>
     </div>
@@ -44,7 +44,7 @@ export default {
       reservationdata:"",
       reservationStoredata:"",
       sync:false,
-      sync2:false
+      // sync2:false
     }
   },
 
@@ -86,8 +86,8 @@ export default {
       //  取得した予約データからストアデータを取得
       await axios.get("https://limitless-shore-94245.herokuapp.com/api/v1/" + this.reservationdata.reservations.store_id + "/stores").then((response) => {this.reservationStoredata =response.data})
 
-       //  データの取得が完了したことを確認するためのスイッチ
-      this.sync2=true
+      //データの取得が完了したことを確認するためのスイッチ。しかし現状エラー内容になるので一時御遺徳
+      // this.sync2=true
     },
 
   },
@@ -111,9 +111,6 @@ export default {
 </script>
 
 <style scoped>
-
-
-
 
 #Mypage{
   width:100%;
@@ -141,7 +138,7 @@ export default {
 
 .right-mypage{
   width:40%;
-  margin-top:180px;
+  margin:180px 0;
   padding-right:150px;
 }
 
@@ -160,7 +157,7 @@ export default {
 }
 
 .mypage-store {
-  margin:0 30px 30px 0;
+  margin:0 30px 45px 0;
 }
 
 </style>

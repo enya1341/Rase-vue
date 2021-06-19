@@ -66,7 +66,7 @@ export default {
      storedatain(){
        /** 全ストアデータの取得 */
        axios.get("https://limitless-shore-94245.herokuapp.com/api/v1/stores").then((response) => {this.storedata =response.data.data})
-      　/** お気に入りデータを取得 */
+       /** お気に入りデータを取得 */
        axios.get("https://limitless-shore-94245.herokuapp.com/api/v1/" + this.$store.state.user.id + "/favorites").then((response) => {this.favoritedata =response.data.data})
 
         this.sync=true
@@ -80,7 +80,7 @@ export default {
     this.storedatain();
   },
 
-  
+
 }
 </script>
 

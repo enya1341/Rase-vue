@@ -2,8 +2,8 @@
   <div id="store">
     <div class="box">
 
-      <img :src="this.parentStore.image">
-
+      <img :src="Storeimage(this.parentStore.image)">
+      <!-- <img :src="this.image"> -->
       <div class="bottom-box">
         <h1>{{this.parentStore.name}}</h1>
         <h3>#{{this.parentStore.region}} #{{this.parentStore.genre}}</h3>
@@ -37,6 +37,7 @@ export  default{
       reservation_id:"",
       favorite_id:"",
       favorite:false,
+      image:require(`./../assets/store/7.jpg`)
     }
   },
   
@@ -62,7 +63,7 @@ export  default{
       if(this.favorite===false){
         this.favorite=true;
 
-        axios.post("https://limitless-shore-94245.herokuapp.com/api/v1/" + this.$store.state.user.id + "/favorites",{
+        axios.post(this.$store.state.host + "/api/v1/" + this.$store.state.user.id + "/favorites",{
           store_id:this.parentStore.id
         }).then((response) => {this.reservation_id =response.data.data.id});
 
@@ -71,13 +72,19 @@ export  default{
 
         axios({
               method: "delete",
-              url: "https://limitless-shore-94245.herokuapp.com/api/v1/"+this.$store.state.user.id+"/favorites",
+              url: this.$store.state.host + "/api/v1/"+this.$store.state.user.id+"/favorites",
               data: {
                 store_id:this.parentStore.id
               }
         })
 
       }
+    },
+
+
+    /** 動的にrequireを機能させるための関数*/
+    Storeimage(imgURL){
+      return require(`../../public/store/${imgURL}`)
     },
 
     /** お気に入りデータが入っている時の処理。これで可否を行う*/

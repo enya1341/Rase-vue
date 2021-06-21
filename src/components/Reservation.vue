@@ -13,7 +13,7 @@
       <div class="reservation-data">
         <div class="data">
           <th>Shop</th>
-          <td>{{this.parentReservationStoredata.data[0].name}}</td>
+          <td>{{this.parentReservationStoredata.name}}</td>
         </div>
         <div class="data">
           <th>Date</th>
@@ -47,7 +47,7 @@ export default {
      reservationClose(){
        axios({
               method: "delete",
-              url: "https://limitless-shore-94245.herokuapp.com/api/v1/"+this.$store.state.user.id+"/reservations",
+              url: this.$store.state.host + "/api/v1/"+this.$store.state.user.id+"/reservations",
               data: {
                 reservation_id: this.parentReservationdata.reservations.id
               }

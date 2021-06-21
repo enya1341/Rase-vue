@@ -10,7 +10,7 @@
           <img src="../assets/next.png" style="transform: scale(-1, 1);" @click="back">
           <h1>{{this.storedata.name}}</h1>
         </div>
-        <img class="store-img" :src="this.storedata.image">
+        <img class="store-img" :src="Storeimage(this.storedata.image)">
         <p class="store-tag">
           #{{this.storedata.region}} #{{this.storedata.genre}}
         </p>
@@ -24,7 +24,7 @@
       <div class="reservation">
         <h1>予約</h1>
         <input type="date" v-model="reservationData.date" />
-        <input class = "long-input" type="text" v-model="reservationData.time" />
+        <input class = "long-input" type="time" v-model="reservationData.time" />
         <input class = "long-input" type="text" v-model="reservationData.number" />
         <div class="reservation-data">
           <div class="data">
@@ -43,10 +43,6 @@
             <tr>
               <th>Number</th>
               <td>{{this.reservationData.number}}人</td>
-            </tr>
-            <tr>
-              <th>datetime</th>
-              <td>{{this.day}}</td>
             </tr>
           </div>
         </div>
@@ -76,7 +72,6 @@ export default {
         date:"",
         time:"",
         number:"",
-        
       },
 
       day:"",
@@ -89,7 +84,7 @@ export default {
   
     /** ストアの詳細データを取得 */
     storedatain(){
-      axios.get("https://limitless-shore-94245.herokuapp.com/api/v1/" + this.$route.params.id + "/stores").then((response) => {this.storedata =response.data.data[0]})
+      axios.get(this.$store.state.host  + "/api/v1/" + this.$route.params.id + "/stores").then((response) => {this.storedata =response.data.data[0]})
 
     },
 
@@ -100,11 +95,16 @@ export default {
       })
     },
 
+    /** 動的にrequireを機能させるための関数*/
+    Storeimage(imgURL){
+      return require(`../../public/store/${imgURL}`)
+    },
+
     /** 予約完了ページに戻る */
     reservation(){
       const day = this.reservationData.date + " " + this.reservationData.time + ":00";
 
-      axios.put("https://limitless-shore-94245.herokuapp.com/api/v1/" + this.$route.params.id + "/reservations",{
+      axios.put(this.$store.state.host + "/api/v1/" + this.$route.params.id + "/reservations",{
         user_id: this.$store.state.user.id,
         day: day,
         number:this.reservationData.number

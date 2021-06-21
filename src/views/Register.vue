@@ -56,7 +56,7 @@ export default {
     /** 会員登録の処理 */
     auth() {
       axios
-        .post("https://limitless-shore-94245.herokuapp.com/api/v1/users/registration", {
+        .post(this.$store.state.host + "/api/v1/users/registration", {
           name: this.name,
           email: this.email,
           password: this.password

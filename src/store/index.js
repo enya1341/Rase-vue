@@ -19,7 +19,8 @@ export default new Vuex.Store({
       email: "",
       password:""
     },
-
+    // host: 'https://limitless-shore-94245.herokuapp.com',
+    host:'http://127.0.0.1:8000',
   },
   mutations: {
     auth(state, payload) {
@@ -41,7 +42,7 @@ export default new Vuex.Store({
     async login({ commit }, { email, password }) {
       // ログインの処理を行う
       const responseLogin = await axios.post(
-        "https://limitless-shore-94245.herokuapp.com/api/v1/users/login",
+        this.state.host + "/api/v1/users/login",
         {
             email,
             password
@@ -49,7 +50,7 @@ export default new Vuex.Store({
       );
       // userのデータをログイン時に取得
       const responseUser = await axios.get(
-        "https://limitless-shore-94245.herokuapp.com/api/v1/users" ,
+        this.state.host + "/api/v1/users" ,
         {
           params: {
             email,
@@ -67,7 +68,7 @@ export default new Vuex.Store({
     /** ログアウトの処理（ログアウト画面はまだ未実装)*/
     logout({ commit }) {
       axios
-        .post("https://limitless-shore-94245.herokuapp.com/api/v1/users/logout", {
+        .post(this.$store.state.host + "/api/v1/users/logout", {
           auth: this.state.auth,
         })
         .then((response) => {

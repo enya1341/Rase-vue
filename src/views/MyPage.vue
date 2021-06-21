@@ -6,7 +6,9 @@
     <div class="flex">
       <div class="left-mypage">
         <p>予約状況</p>
-          <Reservation :parentReservationdata="reservationdata" :parentReservationStoredata="reservationStoredata"/>
+        <div class="mypage-store" v-for="(reservation,index) in reservationdata" :key="index">
+          <Reservation :parentReservationdata="reservation" :parentReservationStoredata="reservationStoredata[index]"/>
+        </div>
       </div>
       <div class="right-mypage">
         <h1>{{this.$store.state.user.name}}さん</h1>
@@ -42,7 +44,7 @@ export default {
       storedata:[],
       favoritedata:[],
       reservationdata:"",
-      reservationStoredata:"",
+      reservationStoredata:[],
       sync:false,
       // sync2:false
     }
@@ -63,15 +65,14 @@ export default {
      async favoritesStoredatain(){
 
       //  お気に入りデータの取得
-      await axios.get("https://limitless-shore-94245.herokuapp.com/api/v1/" + this.$store.state.user.id + "/favorites").then((response) => {this.favoritedata =response.data.data})
+      await axios.get( this.$store.state.host + "/api/v1/" + this.$store.state.user.id + "/favorites").then((response) => {this.favoritedata =response.data.data})
       console.log('お気に入りデータが入れられました')
 
       //  取得したお気に入りデータからストアデータを取得
       for(let n = 0; n < this.favoritedata.length; n++){
-        await axios.get("https://limitless-shore-94245.herokuapp.com/api/v1/" + this.favoritedata[n].store_id + "/stores").then((response) => {this.storedata[n] =response.data.data[0]})
+        await axios.get(this.$store.state.host + "/api/v1/" + this.favoritedata[n].store_id + "/stores").then((response) => {this.storedata[n] =response.data.data[0]})
         console.log(this.storedata[n])
       }
-
       //  データの取得が完了したことを確認するためのスイッチ
       this.sync=true
       
@@ -81,11 +82,12 @@ export default {
     async reservationdatain(){
 
       //  予約データの取得
-      await axios.get("https://limitless-shore-94245.herokuapp.com/api/v1/" + this.$store.state.user.id + "/reservations").then((response) => {this.reservationdata =response.data.data})
+      await axios.get( this.$store.state.host + "/api/v1/" + this.$store.state.user.id + "/reservations").then((response) => {this.reservationdata =response.data.data})
 
       //  取得した予約データからストアデータを取得
-      await axios.get("https://limitless-shore-94245.herokuapp.com/api/v1/" + this.reservationdata.reservations.store_id + "/stores").then((response) => {this.reservationStoredata =response.data})
-
+      for(let i = 0; i < this.reservationdata.length; i++){
+        await axios.get(this.$store.state.host + "/api/v1/" + this.reservationdata[i].reservations.store_id + "/stores").then((response) => {this.reservationStoredata[i] =response.data.data[0]})
+      }
       //データの取得が完了したことを確認するためのスイッチ。しかし現状エラー内容になるので一時御遺徳
       // this.sync2=true
     },
@@ -138,8 +140,8 @@ export default {
 
 .right-mypage{
   width:40%;
-  margin:180px 0;
-  padding-right:150px;
+  margin:180px 0 276px;
+  padding-right:100px;
 }
 
 .right-mypage h1{
@@ -157,6 +159,7 @@ export default {
 }
 
 .mypage-store {
+  width:200px;
   margin:0 30px 45px 0;
 }
 

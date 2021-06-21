@@ -65,9 +65,9 @@ export default {
     /** ストアデータの取得 */
      storedatain(){
        /** 全ストアデータの取得 */
-       axios.get("https://limitless-shore-94245.herokuapp.com/api/v1/stores").then((response) => {this.storedata =response.data.data})
+       axios.get(this.$store.state.host + "/api/v1/stores").then((response) => {this.storedata =response.data.data})
        /** お気に入りデータを取得 */
-       axios.get("https://limitless-shore-94245.herokuapp.com/api/v1/" + this.$store.state.user.id + "/favorites").then((response) => {this.favoritedata =response.data.data})
+       axios.get(this.$store.state.host + "/api/v1/" + this.$store.state.user.id + "/favorites").then((response) => {this.favoritedata =response.data.data})
 
         this.sync=true
       }

@@ -5,7 +5,7 @@
       <div class="head flex">
         <div class="leftflex">
           <img src="../assets/clock.png">
-          <h1>予約1</h1>
+          <h1>予約{{this.parentIndex}}</h1>
         </div>
         <img src="../assets/close.png" @click="reservationClose">
       </div>
@@ -39,19 +39,20 @@ import axios from "axios";
 
 export default {
   
-  props: ["parentReservationdata","parentReservationStoredata"],
+  props: ["parentReservationdata","parentReservationStoredata","parentIndex"],
 
   methods:{
     
     /** 予約取り消し。とりあえず手動のみ*/
-     reservationClose(){
-       axios({
+     async reservationClose(){
+       await axios({
               method: "delete",
               url: this.$store.state.host + "/api/v1/"+this.$store.state.user.id+"/reservations",
               data: {
                 reservation_id: this.parentReservationdata.reservations.id
               }
         })
+        this.$router.go()
     },
 
   }

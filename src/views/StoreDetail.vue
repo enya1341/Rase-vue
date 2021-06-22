@@ -25,7 +25,7 @@
         <h1>予約</h1>
         <input type="date" v-model="reservationData.date" />
         <input class = "long-input" type="time" v-model="reservationData.time" />
-        <input class = "long-input" type="text" v-model="reservationData.number" />
+        <input class = "long-input" type="number" v-model="reservationData.number" />
         <div class="reservation-data">
           <div class="data">
             <tr>
@@ -43,6 +43,14 @@
             <tr>
               <th>Number</th>
               <td>{{this.reservationData.number}}人</td>
+            </tr>
+            <tr v-if="this.errordata.Error" class="error">
+              <th>エラーが発生しました</th>
+              <td>{{this.errordata.message}}</td>
+            </tr>
+            <tr v-if="this.errordata.Error" class="error">
+              <th>エラー部分:</th>
+              <td>{{this.errordata.data}}</td>
             </tr>
           </div>
         </div>
@@ -71,8 +79,11 @@ export default {
       reservationData:{
         date:"",
         time:"",
-        number:"",
+        number:null,
+
       },
+
+      errordata:"",
 
       day:"",
 
@@ -101,18 +112,21 @@ export default {
     },
 
     /** 予約完了ページに戻る */
-    reservation(){
+    async reservation(){
       const day = this.reservationData.date + " " + this.reservationData.time + ":00";
 
-      axios.put(this.$store.state.host + "/api/v1/" + this.$route.params.id + "/reservations",{
+      await axios.put(this.$store.state.host + "/api/v1/" + this.$route.params.id + "/reservations",{
         user_id: this.$store.state.user.id,
         day: day,
         number:this.reservationData.number
-      }),
+      }).then((response) => {this.errordata =response.data});
 
-      this.$router.push({
+      if(!this.errordata.Error){
+        this.$router.push({
         name: 'ReservationCompletion',
-      })
+        })
+      }
+
     },
 
   },
@@ -123,7 +137,8 @@ export default {
 
   created() {
     this.storedatain();
-  }
+  },
+
 }
 </script>
 
@@ -213,6 +228,15 @@ export default {
   padding-bottom:15px;
   text-align: left;
 }
+
+.error th{
+  width:190px;
+  padding-bottom:15px;
+  text-align: left;
+  color:red;
+}
+
+
 
 .reservation-button{
   position: absolute;

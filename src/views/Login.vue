@@ -12,14 +12,17 @@
           <img src="../assets/mail.png" width="32px">
           <input placeholder="Email" type="email" v-model="email" />
         </div>
+
         <div class="form flex">
           <img src="../assets/password.png" width="32px">
           <input placeholder="Password" type="password" v-model="password" />
         </div>
+
         <div class="buttonflex">
           <button @click="register">新規登録</button>
           <button @click="auth">ログイン</button>
         </div>
+        <p v-if="error" class="errorLog">このメールアドレスは有効ではありません</p>
       </div>
 
     </div>
@@ -35,7 +38,9 @@ export default {
   data() {
     return {
       email: "",
-      password: ""
+      password: "",
+      check:false,
+      error:false
     };
   },
   components: {
@@ -45,10 +50,14 @@ export default {
 
     /** storeに用意していたログイン処理を実行 */
     auth() {
-      this.$store.dispatch("login", {
-        email: this.email,
-        password: this.password
-      });
+      if(this.check===true){
+        this.$store.dispatch("login", {
+          email: this.email,
+          password: this.password
+        });
+      }else{
+        this.error=true;
+      }  
     },
 
     register() {
@@ -58,6 +67,16 @@ export default {
     }
 
 
+  },
+  watch: {
+    email: function () {
+      var re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+      if(re.test(this.email)){
+        return this.check=true;
+      }else{
+        return this.check=false;
+      } 
+    },
   }
 }
 </script>
@@ -134,6 +153,12 @@ button {
   border-radius: 25px;
   cursor: pointer;
   margin:30px 70px 30px 60px;
+}
+
+.errorLog{
+  color: rgb(243, 0, 0);
+  text-align: center;
+  padding-bottom:30px;
 }
 
 </style>

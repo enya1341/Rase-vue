@@ -7,7 +7,7 @@
       <div class="left-mypage">
         <p>予約状況</p>
         <div class="mypage-store" v-for="(reservation,index) in reservationdata" :key="index">
-          <Reservation :parentReservationdata="reservation" :parentReservationStoredata="reservationStoredata[index]"/>
+          <Reservation :parentReservationdata="reservation" :parentReservationStoredata="reservationStoredata[index]" :parentIndex="index+1"/>
         </div>
       </div>
       <div class="right-mypage">

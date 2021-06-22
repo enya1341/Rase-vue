@@ -21,6 +21,7 @@
           <input placeholder="Password" type="password" v-model="password" />
         </div>
         <button @click="auth">登録</button>
+        <p v-if="error" class="errorLog">このメールアドレスは有効ではありません</p>
       </div>
 
     </div>
@@ -41,7 +42,9 @@ export default {
     return {
       name: "",
       email: "",
-      password: ""
+      password: "",
+      check:false,
+      error:false
     };
   },
 
@@ -55,7 +58,8 @@ export default {
 
     /** 会員登録の処理 */
     auth() {
-      axios
+      if(this.check===true){
+        axios
         .post(this.$store.state.host + "/api/v1/users/registration", {
           name: this.name,
           email: this.email,
@@ -68,10 +72,25 @@ export default {
         .catch(error => {
           alert(error);
         });
+      }else{
+        this.error=true;
+      }
+
     }
 
 
-  }
+  },
+  watch: {
+    email: function () {
+      var re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+      if(re.test(this.email)){
+        return this.check=true;
+      }else{
+        return this.check=false;
+      }
+      
+    },
+  },
 }
 
 </script>
@@ -144,6 +163,12 @@ button {
   border-radius: 25px;
   cursor: pointer;
   margin:30px 70% 30px;
+}
+
+.errorLog{
+  color: rgb(243, 0, 0);
+  text-align: center;
+  padding-bottom:30px;
 }
 
 </style>

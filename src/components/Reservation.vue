@@ -27,6 +27,23 @@
           <th>Number</th>
           <td>{{this.parentReservationdata.reservations.number}}人</td>
         </div>
+        <div class="data">
+          <th>評価</th>
+          <td>
+            <select class="value-select" v-model="value">
+              <option disabled value="">評価をきめてください</option>
+              <option>1</option>
+              <option>2</option>
+              <option>3</option>
+              <option>4</option>
+              <option>5</option>
+            </select>
+            <button @click="valuedata">送信</button>
+          </td>
+        </div>
+        <div>
+          <th>{{this.errordata.message}}</th>
+        </div>
       </div>
 
     </div>
@@ -40,7 +57,14 @@ import axios from "axios";
 export default {
   
   props: ["parentReservationdata","parentReservationStoredata","parentIndex"],
+  data(){
+    return{
+      value:"",
+      errordata:""
 
+    }
+  },
+  
   methods:{
     
     /** 予約取り消し。とりあえず手動のみ*/
@@ -55,6 +79,13 @@ export default {
         this.$router.go()
     },
 
+    valuedata(){
+      axios.post(this.$store.state.host + "/api/v1/" + this.parentReservationStoredata.id + "/values",{
+        user_id: this.$store.state.user.id,
+        value:this.value
+      }).then((response) => {this.errordata =response.data});
+    }
+
   }
 
 }
@@ -66,7 +97,7 @@ export default {
 
 .box {
   width:400px;
-  height:250px;
+  height:300px;
   background-color: rgb(0, 106, 245);
   border-radius: 10px;
   box-shadow: 3px 3px 0 0 rgba(0, 34, 97, 0.5)
@@ -96,6 +127,8 @@ img{
   margin:10px auto;
 }
 
+
+
 .flex {
   display: flex;
   justify-content: space-between;
@@ -108,13 +141,43 @@ img{
 }
 
 .data{
-  margin:20px 0;
+  margin:20px 0 10px;
 }
 
 .data th{
   width:190px;
   text-align: left;
 }
+
+
+
+.value-select{
+  color:black;
+  width:40%;
+  
+}
+
+.value-select option{
+  color:black;
+}
+
+.value-flex{
+  display: flex;
+ 
+}
+
+button {
+  width: 60px;
+  height:30px;
+  text-align: center;
+  padding: 4px 0 10px;
+  color: #fff;
+  background-color: #2f00ff;
+  border-radius: 10px;
+  cursor: pointer;
+  margin-left:10px;
+}
+
 
 
 

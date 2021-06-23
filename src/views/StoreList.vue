@@ -2,8 +2,9 @@
   <div v-if = "sync" id="Storelist">
 
     <div class="header-flex">
-      <div class="header-icon">
+      <div class="header-icon flex">
         <HeaderIcon/>
+        <p @click="mypage">マイページへ</p>
       </div>
       <div class="search-box">
         <div class="search-area">
@@ -70,7 +71,13 @@ export default {
        axios.get(this.$store.state.host + "/api/v1/" + this.$store.state.user.id + "/favorites").then((response) => {this.favoritedata =response.data.data})
 
         this.sync=true
-      }
+      },
+    /** ストア詳細ページに遷移*/
+      mypage(){
+        this.$router.push({
+        name: 'MyPage'
+        })
+      },
 
 
   },
@@ -98,6 +105,14 @@ export default {
   display: flex;
   justify-content: space-between;
   width:90%;
+}
+
+.header-icon p{
+  margin-top:55px;
+  margin-left:60px;
+  font-size:18px;
+  cursor: pointer;
+  color:yellow;
 }
 
 .search-box{

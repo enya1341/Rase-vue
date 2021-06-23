@@ -68,9 +68,7 @@ export default new Vuex.Store({
     /** ログアウトの処理（ログアウト画面はまだ未実装)*/
     logout({ commit }) {
       axios
-        .post(this.$store.state.host + "/api/v1/users/logout", {
-          auth: this.state.auth,
-        })
+        .post(this.state.host + "/api/v1/users/logout")
         .then((response) => {
           console.log(response);
           commit("logout", response.data.auth);

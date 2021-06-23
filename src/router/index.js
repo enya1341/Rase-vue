@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Login from '../views/Login.vue'
+import Logout from '../views/Logout.vue'
 import MyPage from '../views/MyPage.vue'
 import Register from '../views/Register.vue'
 import Thankyou from '../views/Thankyou.vue'
@@ -23,6 +24,14 @@ const routes = [
     component: Login
   },
   {
+    path: '/logout',
+    name: 'Logout',
+    component: Logout,
+    meta: {
+      requiresAuth: true,
+    },
+  },
+  {
     path: '/mypage',
     name: 'MyPage',
     component: MyPage,
@@ -30,6 +39,7 @@ const routes = [
       requiresAuth: true,
     },
   },
+  
   {
     path: '/thankyou',
     name: 'Thankyou',

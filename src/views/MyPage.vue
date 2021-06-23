@@ -1,7 +1,11 @@
 <template>
   <div v-if="sync" id="Mypage">
-    <div class="header-icon">
+    <div class="header-icon header-flex">
       <HeaderIcon/>
+      <div class ="header-link flex">
+        <p @click="StoreList" class="storelist">ストア一覧</p>
+        <p @click="Logout" class="logout">ログアウト</p>
+      </div>
     </div>
     <div class="flex">
       <div class="left-mypage">
@@ -92,6 +96,20 @@ export default {
       // this.sync2=true
     },
 
+    /** ストア詳細ページに遷移*/
+    StoreList(){
+      this.$router.push({
+        name: 'StoreList'
+      })
+    },
+
+    /** ストア詳細ページに遷移*/
+    Logout(){
+      this.$router.push({
+        name: 'Logout'
+      })
+    },
+
   },
 
   /** データ取得の確認 */
@@ -125,6 +143,31 @@ export default {
   flex-wrap :wrap;
 }
 
+
+.header-flex {
+  display: flex;
+  justify-content: space-between;
+  width:90%;
+}
+
+.header-link{
+  margin-top:65px;
+}
+
+.header-link p{
+  font-size:18px;
+  margin-right:25px;
+  cursor: pointer;
+}
+
+.storelist{
+  color:blue;
+}
+
+.logout{
+  color:red;
+}
+
 .left-mypage{
   display: table;
   width:40%;
@@ -141,7 +184,7 @@ export default {
 .right-mypage{
   width:40%;
   margin:180px 0 276px;
-  padding-right:100px;
+  padding-right:60px;
 }
 
 .right-mypage h1{

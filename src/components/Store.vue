@@ -7,6 +7,10 @@
       <div class="bottom-box">
         <h1>{{this.parentStore.name}}</h1>
         <h3>#{{this.parentStore.region}} #{{this.parentStore.genre}}</h3>
+        <div class = "value">
+          <p>評価:{{this.values}}</p>
+          <p>{{this.count}}件</p>
+        </div>
         <div class="flex">
           <button @click="StoreDetail">詳しくみる</button>
           <img v-if="this.favorite===true" src='../assets/heartin.png' @click="Favoritedata">
@@ -36,6 +40,9 @@ export  default{
     return{
       reservation_id:"",
       favorite_id:"",
+      valuedata:[],
+      values:0,
+      count:0,
       favorite:false,
       image:require(`./../assets/store/7.jpg`)
     }
@@ -44,6 +51,7 @@ export  default{
 
   mounted: function(){
     this.FavoriteGet();
+    this.ValueGet();
     console.log("mountedが実行されました")
   },
 
@@ -81,6 +89,19 @@ export  default{
       }
     },
 
+    async ValueGet(){
+      await axios.get(this.$store.state.host + "/api/v1/" + this.parentStore.id + "/values").then((response) => {this.valuedata =response.data.data})
+
+      for(let i = 0;i < this.valuedata.length;i++){
+        this.values = this.values + this.valuedata[i].value;
+        this.count += 1;
+      }
+      if(this.valuedata.length){
+        this.values = this.values / this.count;
+      }
+      
+    },
+
 
     /** 動的にrequireを機能させるための関数*/
     Storeimage(imgURL){
@@ -110,7 +131,7 @@ export  default{
 
 .box {
   width:100%;
-  height:240px;
+  height:280px;
   background-color: white;
   border-radius: 10px;
   
@@ -138,6 +159,15 @@ export  default{
 .bottom-box h3{
   margin-bottom:15px;
   color:black;
+}
+
+.value{
+  display: flex;
+}
+
+.value p{
+  color:black;
+  margin-right:30px;
 }
 
 .bottom-box img{

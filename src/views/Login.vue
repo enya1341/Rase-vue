@@ -3,8 +3,9 @@
     <HeaderIcon/>
     <div class="box">
 
-      <div class="top-box">
+      <div class="top-box flex">
         <h1>Login</h1>
+        <p @click='change' class="change">環境切り替え</p>
       </div>
 
       <div class="buttom-box">
@@ -64,6 +65,10 @@ export default {
       this.$router.push({
         name: 'Register'
       })
+    },
+
+    change(){
+      this.$store.commit('hostChange')
     }
 
 
@@ -107,6 +112,11 @@ export default {
   background-color: #2f00ff;
   padding:20px 20px;
   color:white;
+}
+
+.change{
+  margin-left:30px;
+  cursor: pointer;
 }
 
 .buttom-box{

@@ -19,8 +19,8 @@ export default new Vuex.Store({
       email: "",
       password:""
     },
-    // host: 'https://limitless-shore-94245.herokuapp.com',
-    host:'http://127.0.0.1:8000',
+    host: 'https://limitless-shore-94245.herokuapp.com',
+    // localhost:'http://127.0.0.1:8000' heroku:'https://limitless-shore-94245.herokuapp.com',
   },
   mutations: {
     auth(state, payload) {
@@ -32,9 +32,20 @@ export default new Vuex.Store({
     logout(state, payload) {
       state.auth = payload;
     },
+    host(state, payload) {
+      state.host = payload;
+    },
     changeUserData(state, payload) {
       state.user.profile = payload;
     },
+    hostChange(state) {
+      if (state.host==='http://127.0.0.1:8000') {
+        state.host = 'https://limitless-shore-94245.herokuapp.com'
+      } else {
+        state.host ='http://127.0.0.1:8000'
+      }
+      
+    }
   },
   actions: {
 

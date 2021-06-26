@@ -52,6 +52,7 @@ const routes = [
     meta: {
       requiresAuth: true,
     },
+    props: true,
   },
   {
     path: '/storedetail/:id',

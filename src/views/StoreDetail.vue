@@ -123,7 +123,7 @@ export default {
 
       if(!this.errordata.Error){
         this.$router.push({
-        name: 'ReservationCompletion',
+        name: 'ReservationCompletion', params:{reservation:this.errordata.data}
         })
       }
 

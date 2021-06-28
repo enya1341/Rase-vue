@@ -11,6 +11,7 @@
     "@chenfengyuan/vue-qrcode": "^1.0.2",
     "axios": "^0.21.1",
     "core-js": "^3.14.0",
+    "firebase": "^8.6.8",
     "vue": "^2.6.14",
     "vue-router": "^3.2.0",
     "vuex": "^3.4.0",

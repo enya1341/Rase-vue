@@ -21,7 +21,7 @@ export default {
 
     /** そのままログインページへ（ここはいつか修正) */
     auth() {
-      this.$router.push("/");
+      this.$router.push("/mypage");
     }
 
 

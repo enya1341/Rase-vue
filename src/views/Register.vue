@@ -21,7 +21,10 @@
           <input placeholder="Password" type="password" v-model="password" />
         </div>
         <button @click="auth">登録</button>
-        <p v-if="error" class="errorLog">このメールアドレスは有効ではありません</p>
+        <p v-if="emailError" class="errorLog">このメールアドレスは有効ではありません</p>
+        <p v-if="passwordError" class="errorLog">パスワードが6文字以下です</p>
+        <p v-if="error" class="errorLog">会員登録に失敗しました</p>
+        <p class="errorLog">{{this.check}}</p>
       </div>
 
     </div>
@@ -35,6 +38,8 @@ import HeaderIcon from '@/components/HeaderIcon.vue'
 
 import axios from "axios";
 
+import firebase from 'firebase';
+
 export default {
 
 
@@ -44,7 +49,10 @@ export default {
       email: "",
       password: "",
       check:false,
-      error:false
+      error:false,
+      emailError:false,
+      passwordError:false,
+      registerAuth:false
     };
   },
 
@@ -57,9 +65,30 @@ export default {
   methods: {
 
     /** 会員登録の処理 */
-    auth() {
-      if(this.check===true){
-        axios
+    async auth() {
+       await firebase.auth().createUserWithEmailAndPassword(this.email, this.password)
+      .then(
+        // 成功時の処理
+        alert('会員登録に成功しました'),
+        this.$store.state.auth=true,
+        this.error=false
+      )
+      .catch(
+        error => {
+          // エラー時の処理 
+          alert(error);
+          // commit('auth', false);
+          // this.state.loginErrorMessage = true
+          this.$store.state.auth=false,
+          this.error=true
+        }
+        // // エラー時の処理 
+        // alert('会員登録に失敗しました'),
+        
+      )
+
+      if(this.check===true && this.$store.state.auth===true){
+        await axios
         .post(this.$store.state.host + "/api/v1/users/registration", {
           name: this.name,
           email: this.email,
@@ -72,8 +101,25 @@ export default {
         .catch(error => {
           alert(error);
         });
-      }else{
-        this.error=true;
+
+        await axios({
+              method: "get",
+              url: this.$store.state.host + "/api/v1/users",
+              params: {
+                email:this.email
+              }
+        }).then((response) => {this.$store.state.user =response.data.data[0],console.log(response.data.data[0])})
+
+        // await axios.get(
+        // this.$store.state.host + "/api/v1/users" ,
+        // {
+        //   params: this.email
+        // }
+        // ).then((response) => {this.$store.state.user =response.data.data[0],console.log(response.data.data[0])})
+        this.emailError=false;
+      }
+      else{
+        this.emailError=true;
       }
 
     }
@@ -90,6 +136,13 @@ export default {
       }
       
     },
+    password: function(){
+      if(this.password.length<7){
+        return this.passwordError=true;
+      }else{
+        return this.passwordError=false;
+      }
+    }
   },
 }
 

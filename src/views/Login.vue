@@ -23,7 +23,9 @@
           <button @click="register">新規登録</button>
           <button @click="auth">ログイン</button>
         </div>
-        <p v-if="error" class="errorLog">このメールアドレスは有効ではありません</p>
+        <p v-if="emailError" class="errorLog">このメールアドレスは有効ではありません</p>
+        <p v-if="passwordError" class="errorLog">パスワードが6文字以下です</p>
+        <p v-if="this.$store.state.loginErrorMessage" class="errorLog">ログインに失敗しました</p>
       </div>
 
     </div>
@@ -41,7 +43,8 @@ export default {
       email: "",
       password: "",
       check:false,
-      error:false
+      emailError:false,
+      passwordError:false
     };
   },
   components: {
@@ -56,8 +59,9 @@ export default {
           email: this.email,
           password: this.password
         });
+        this.emailError=false;
       }else{
-        this.error=true;
+        this.emailError=true;
       }  
     },
 
@@ -82,6 +86,13 @@ export default {
         return this.check=false;
       } 
     },
+    password: function(){
+      if(this.password.length<7){
+        return this.passwordError=true;
+      }else{
+        return this.passwordError=false;
+      }
+    }
   }
 }
 </script>

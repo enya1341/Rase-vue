@@ -8,7 +8,9 @@ import Thankyou from '../views/Thankyou.vue'
 import ReservationCompletion from '../views/ReservationCompletion.vue'
 import StoreDetail from '../views/StoreDetail.vue'
 import StoreList from '../views/StoreList.vue'
-import store from "../store/index";
+import firebase from 'firebase'
+// /** storeデータ画像のコンポーネント */
+import store from '../store/index'
 
 Vue.use(VueRouter)
 
@@ -82,15 +84,20 @@ const router = new VueRouter({
 /** ナビゲーションガード*/
 router.beforeEach((to, from, next) => {
   if (
-    to.matched.some((record) => record.meta.requiresAuth) &&
-    !store.state.auth
+    to.matched.some((record) => record.meta.requiresAuth)
   ) {
-    next({
-      path: '/',
-      query: {
-        redirect: to.fullPath,
-      },
-    });
+    firebase.auth().onAuthStateChanged(function (user) {
+      if (user  && store.state.auth) {
+        next()
+      } else {
+        // 認証されていない場合、認証画面へ
+        next(
+          {
+            name: 'Login', query: { redirect: to.fullPath, }
+          }
+        )
+      }
+    })
   } else {
     next();
   }

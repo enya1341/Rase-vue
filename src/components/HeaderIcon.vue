@@ -6,6 +6,8 @@
     <span></span>
   </div>
   <h1 @click="storelist">Rase</h1>
+  <h1>{{this.$store.state.auth}}</h1>
+  <h1>{{this.$store.state.host}}</h1>
 </div>
 
 

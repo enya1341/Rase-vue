@@ -16,6 +16,7 @@
       </div>
       <div class="right-mypage">
         <h1>{{this.$store.state.user.name}}さん</h1>
+        
         <p>お気に入りの店舗</p>
         <div class="flex">
           <div class="mypage-store" v-for="(store,index) in storedata" :key="index">

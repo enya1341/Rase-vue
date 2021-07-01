@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="box">
+    <div class="box" >
 
       <div class="head flex">
         <div class="leftflex">
@@ -10,7 +10,7 @@
         <img src="../assets/close.png" @click="reservationClose">
       </div>
 
-      <div class="reservation-data">
+      <div class="reservation-data" v-if="!(this.QRauth)">
         <div class="data">
           <th>Shop</th>
           <td>{{this.parentReservationStoredata.name}}</td>
@@ -41,12 +41,26 @@
             <button @click="valuedata">送信</button>
           </td>
         </div>
+        <div class="data">
+          <th>QRコード:</th>
+          <td>
+            <button v-if="!(this.QRauth)" @click="QRopen">表示</button>
+          </td>
+        </div>
         <div>
           <th>{{this.errordata.message}}</th>
         </div>
       </div>
 
+      <div class="reservation-data" v-if="this.QRauth">
+        <VueQrcode class = "QRcode" v-if="this.QRauth" :value="this.parentReservationdata.reservations.QRcodeData" :options="option" tag="img"/>
+
+        <button class = "QR-button" v-if="this.QRauth" @click="QRclose">閉じる</button>
+
+      </div>
+
     </div>
+    
   </div>
 </template>
 
@@ -54,14 +68,21 @@
 
 import axios from "axios";
 
+import VueQrcode from "@chenfengyuan/vue-qrcode";
+
 export default {
   
   props: ["parentReservationdata","parentReservationStoredata","parentIndex"],
+
+  components: {
+    VueQrcode
+  },
+
   data(){
     return{
       value:"",
-      errordata:""
-
+      errordata:"",
+      QRauth:null
     }
   },
   
@@ -84,6 +105,14 @@ export default {
         user_id: this.$store.state.user.id,
         value:this.value
       }).then((response) => {this.errordata =response.data});
+    },
+
+    QRopen() {
+      this.QRauth = true;
+    },
+
+    QRclose() {
+      this.QRauth = false;
     }
 
   }
@@ -97,7 +126,7 @@ export default {
 
 .box {
   width:400px;
-  height:300px;
+  height:320px;
   background-color: rgb(0, 106, 245);
   border-radius: 10px;
   box-shadow: 3px 3px 0 0 rgba(0, 34, 97, 0.5)
@@ -147,6 +176,18 @@ img{
 .data th{
   width:190px;
   text-align: left;
+}
+
+.QRcode{
+  display: table;
+  margin:15px auto;
+  width:50%;
+  height:50%;
+}
+
+.QR-button{
+  display: table;
+  margin:0 auto;
 }
 
 

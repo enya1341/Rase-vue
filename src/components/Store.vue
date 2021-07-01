@@ -96,6 +96,7 @@ export  default{
         this.values = this.values + this.valuedata[i].value;
         this.count += 1;
       }
+      
       if(this.valuedata.length){
         this.values = this.values / this.count;
       }

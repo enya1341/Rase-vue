@@ -3,8 +3,7 @@
     <Icon/>
     <div class="box">
       <h1>ご予約ありがとうございます</h1>
-      <h1>{{this.reservation}}</h1>
-      <vue-qrcode :value="this.reservation" :options="option"></vue-qrcode>
+      <VueQrcode class = "QRcode" v-if="this.QRdata" :value="this.QRdata" :options="option" tag="img"/>
       <button @click="back">戻る</button>
     </div>
   </div>
@@ -14,14 +13,14 @@
 
 import Icon from '@/components/HeaderIcon.vue'
 
-// import VueQrcode from "@chenfengyuan/vue-qrcode";
+import VueQrcode from "@chenfengyuan/vue-qrcode";
 
 export default {
 
-  props: ['reservation'],
+  props: ['QRdata'],
   components: {
-    Icon
-    // VueQrcode
+    Icon,
+    VueQrcode
   },
   methods:{
 
@@ -64,6 +63,12 @@ export default {
   color:black;
 }
 
+.QRcode{
+  display: table;
+  width:50%;
+  margin:0 auto;
+}
+
 button {
   display: table;
   width: 100px;
@@ -73,7 +78,7 @@ button {
   background-color: #2f00ff;
   border-radius: 25px;
   cursor: pointer;
-  margin:60px auto 0;
+  margin:30px auto 30px;
 }
 
 </style>

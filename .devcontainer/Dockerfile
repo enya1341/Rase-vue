@@ -17,12 +17,12 @@ COPY package*.json ./ package-lock*.json ./
 COPY . .
 
 # プロジェクトの依存ライブラリをインストールする
-RUN npm install @vue/cli@3.7.0 -g
+# RUN npm install @vue/cli@3.7.0 -g
 RUN npm install
 
 
 # 本番向けに圧縮しながらアプリケーションをビルドする
-RUN npm run build
+# RUN npm run build
 
 EXPOSE 8080
 CMD [ "npm", "run" , "serve" ]

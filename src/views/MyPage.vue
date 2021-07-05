@@ -1,5 +1,5 @@
 <template>
-  <div v-if="sync" id="Mypage">
+  <div v-if="sync && sync2" id="Mypage">
     <div class="header-icon header-flex">
       <HeaderIcon/>
       <div class ="header-link flex">
@@ -51,7 +51,7 @@ export default {
       reservationdata:"",
       reservationStoredata:[],
       sync:false,
-      // sync2:false
+      sync2:false
     }
   },
 
@@ -94,7 +94,7 @@ export default {
         await axios.get(this.$store.state.host + "/api/v1/" + this.reservationdata[i].reservations.store_id + "/stores").then((response) => {this.reservationStoredata[i] =response.data.data[0]})
       }
       //データの取得が完了したことを確認するためのスイッチ。しかし現状エラー内容になるので一時御遺徳
-      // this.sync2=true
+      this.sync2=true
     },
 
     /** ストア詳細ページに遷移*/

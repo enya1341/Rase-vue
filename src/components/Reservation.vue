@@ -129,13 +129,14 @@ export default {
         day:day
       }).then((response) => {this.errordata =response.data});
     },
+
     async reservation(){
 
       const day = this.reservationData.date + " " + this.reservationData.time + ":00";
 
       const QRdata = "店舗名:" + this.parentReservationStoredata.name + " 予約日:" + this.reservationData.date + " 予約時間:" + this.reservationData.time + " 予約人数:" + this.reservationData.number;
 
-      await axios.put(this.$store.state.host + "/api/v1/" + this.parentReservationStoredata.id + "/reservations",{
+      await axios.put(this.$store.state.host + "/api/v1/" + this.parentReservationdata.reservations.store_id + "/reservations",{
         user_id: this.$store.state.user.id,
         reservation_id:this.parentReservationdata.reservations.id,
         day: day,

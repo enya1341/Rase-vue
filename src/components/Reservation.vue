@@ -122,9 +122,11 @@ export default {
     },
 
     valuedata(){
+      const day = this.reservationData.date + " " + this.reservationData.time + ":00";
       axios.post(this.$store.state.host + "/api/v1/" + this.parentReservationStoredata.id + "/values",{
         user_id: this.$store.state.user.id,
-        value:this.value
+        value:this.value,
+        day:day
       }).then((response) => {this.errordata =response.data});
     },
     async reservation(){

@@ -23,17 +23,16 @@ export default new Vuex.Store({
       password:""
     },
     config: {
-      apiKey: "AIzaSyAxIIs7Cxf9NSIWJmD_U0npi_phwIabtm8",
-      authDomain: "rase-vue.firebaseapp.com",
-      databaseURL: "https://rase-vue-default-rtdb.firebaseio.com",
-      projectId: "rase-vue",
-      storageBucket: "rase-vue.appspot.com",
-      messagingSenderId: "650383339554",
-      appId: "1:650383339554:web:a30dd19bd934a3f2309a7b"
+        apiKey: "AIzaSyAfsdhyAod-oQWYRvmlo3GLg6vL7T9Noa8",
+        authDomain: "rase-vue-production.firebaseapp.com",
+        projectId: "rase-vue-production",
+        storageBucket: "rase-vue-production.appspot.com",
+        messagingSenderId: "296728946619",
+        appId: "1:296728946619:web:b0763b8bf1829348f1469e"
     },
 
 
-    host: 'http://127.0.0.1:8000',
+    host: 'https://whispering-retreat-97645.herokuapp.com',
     // localhost:'http://127.0.0.1:8000' heroku:'https://whispering-retreat-97645.herokuapp.com',
     
   },

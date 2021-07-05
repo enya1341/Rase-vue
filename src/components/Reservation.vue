@@ -17,15 +17,27 @@
         </div>
         <div class="data">
           <th>Date</th>
-          <td>{{this.parentReservationdata.date}}</td>
+          <td v-if="!(this.Changeauth)">{{this.reservationData.date}}</td>
+          <!-- <td>{{this.parentReservationdata.reservations.id}}</td> -->
+          <td v-if="this.Changeauth">
+            <input class = "Change-input" type="date" v-model="reservationData.date" />
+          </td>
         </div>
         <div class="data">
           <th>Time</th>
-          <td>{{this.parentReservationdata.time}}</td>
+          <td v-if="!(this.Changeauth)">{{this.reservationData.time}}</td>
+          <td v-if="this.Changeauth">
+            <input class = "Change-input" type="time" v-model="reservationData.time" />
+          </td>
+          
         </div>
         <div class="data">
           <th>Number</th>
-          <td>{{this.parentReservationdata.reservations.number}}人</td>
+          <td v-if="!(this.Changeauth)">{{this.reservationData.number}}人</td>
+          <td v-if="this.Changeauth">
+            <input class = "Change-input" type="number" v-model="reservationData.number" />
+          </td>
+          
         </div>
         <div class="data">
           <th>評価</th>
@@ -41,15 +53,18 @@
             <button @click="valuedata">送信</button>
           </td>
         </div>
+        <div>
+          <th>{{this.errordata.message}}</th>
+        </div>
         <div class="data">
           <th>QRコード:</th>
           <td>
             <button v-if="!(this.QRauth)" @click="QRopen">表示</button>
           </td>
         </div>
-        <div>
-          <th>{{this.errordata.message}}</th>
-        </div>
+        <button v-if="!(this.Changeauth)" class="reservation-change" @click="Changeopen">予約変更</button>
+        <button class = "reservation-change-false" v-if="this.Changeauth"  @click="reservation">変更適用</button>
+        <button class = "reservation-change-false" v-if="this.Changeauth"  @click="Changeclose">戻る</button>
       </div>
 
       <div class="reservation-data" v-if="this.QRauth">
@@ -82,7 +97,13 @@ export default {
     return{
       value:"",
       errordata:"",
-      QRauth:null
+      QRauth:null,
+      Changeauth:false,
+      reservationData:{
+        date:this.parentReservationdata.date,
+        time:this.parentReservationdata.time,
+        number:this.parentReservationdata.reservations.number,
+      },
     }
   },
   
@@ -106,6 +127,29 @@ export default {
         value:this.value
       }).then((response) => {this.errordata =response.data});
     },
+    async reservation(){
+
+      const day = this.reservationData.date + " " + this.reservationData.time + ":00";
+
+      const QRdata = "店舗名:" + this.parentReservationStoredata.name + " 予約日:" + this.reservationData.date + " 予約時間:" + this.reservationData.time + " 予約人数:" + this.reservationData.number;
+
+      await axios.put(this.$store.state.host + "/api/v1/" + this.parentReservationStoredata.id + "/reservations",{
+        user_id: this.$store.state.user.id,
+        reservation_id:this.parentReservationdata.reservations.id,
+        day: day,
+        QRdata: QRdata,
+        number:this.reservationData.number
+      }).then((response) => {this.errordata =response.data});
+
+      
+
+      if(!this.errordata.Error){
+        this.$router.push({
+        name: 'ReservationCompletion', params:{QRdata}
+        })
+      }
+
+    },
 
     QRopen() {
       this.QRauth = true;
@@ -113,6 +157,14 @@ export default {
 
     QRclose() {
       this.QRauth = false;
+    },
+
+    Changeopen(){
+      this.Changeauth = true;
+    },
+
+    Changeclose(){
+      this.Changeauth = false;
     }
 
   }
@@ -126,7 +178,7 @@ export default {
 
 .box {
   width:400px;
-  height:320px;
+  height:400px;
   background-color: rgb(0, 106, 245);
   border-radius: 10px;
   box-shadow: 3px 3px 0 0 rgba(0, 34, 97, 0.5)
@@ -188,6 +240,24 @@ img{
 .QR-button{
   display: table;
   margin:0 auto;
+}
+
+.reservation-change{
+  width:70px;
+  display: table;
+  margin:30px auto;
+}
+
+.reservation-change-false{
+  width:70px;
+  margin:10px 40px;
+}
+
+.data input{
+  display:block;
+  border-radius: 5px;
+  color:black;
+  width:120px;
 }
 
 

@@ -33,8 +33,8 @@ export default new Vuex.Store({
     },
 
 
-    host: 'https://limitless-shore-94245.herokuapp.com',
-    // localhost:'http://127.0.0.1:8000' heroku:'https://limitless-shore-94245.herokuapp.com',
+    host: 'http://127.0.0.1:8000',
+    // localhost:'http://127.0.0.1:8000' heroku:'https://whispering-retreat-97645.herokuapp.com',
     
   },
   mutations: {
@@ -55,7 +55,7 @@ export default new Vuex.Store({
     },
     hostChange(state) {
       if (state.host==='http://127.0.0.1:8000') {
-        state.host = 'https://limitless-shore-94245.herokuapp.com'
+        state.host = 'https://whispering-retreat-97645.herokuapp.com'
         state.config = {
           apiKey: "AIzaSyAfsdhyAod-oQWYRvmlo3GLg6vL7T9Noa8",
           authDomain: "rase-vue-production.firebaseapp.com",

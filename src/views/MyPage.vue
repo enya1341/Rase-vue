@@ -3,6 +3,8 @@
     <div class="header-icon header-flex">
       <HeaderIcon/>
       <div class ="header-link flex">
+         <p @click="Admin" class = "adminbotton">管理者画面へ</p>
+         <p @click="StoreAdmin" class = "adminbotton">店舗管理者画面へ</p>
         <p @click="StoreList" class="storelist">ストア一覧</p>
         <p @click="Logout" class="logout">ログアウト</p>
       </div>
@@ -11,12 +13,11 @@
       <div class="left-mypage">
         <p>予約状況</p>
         <div class="mypage-store" v-for="(reservation,index) in reservationdata" :key="index">
-          <Reservation :parentReservationdata="reservation" :parentReservationStoredata="reservationStoredata[index]" :parentIndex="index+1"/>
+          <Reservation :parentReservationdata="reservation" :parentReservationStoredata="reservationStoredata[index]" :parentIndex="index+1" :parentSwitch="false" />
         </div>
       </div>
       <div class="right-mypage">
         <h1>{{this.$store.state.user.name}}さん</h1>
-        
         <p>お気に入りの店舗</p>
         <div class="flex">
           <div class="mypage-store" v-for="(store,index) in storedata" :key="index">
@@ -51,7 +52,7 @@ export default {
       reservationdata:"",
       reservationStoredata:[],
       sync:false,
-      sync2:false
+      sync2:false,
     }
   },
 
@@ -104,10 +105,24 @@ export default {
       })
     },
 
-    /** ストア詳細ページに遷移*/
+    /** ログアウト画面に遷移*/
     Logout(){
       this.$router.push({
         name: 'Logout'
+      })
+    },
+
+    /** 管理者画面に遷移*/
+    Admin(){
+      this.$router.push({
+        name: 'Admin'
+      })
+    },
+
+    /** 店舗管理者画面に遷移*/
+    StoreAdmin(){
+      this.$router.push({
+        name: 'StoreAdmin'
       })
     },
 
@@ -163,10 +178,20 @@ export default {
 
 .storelist{
   color:blue;
+  text-shadow:1px 2px 3px #11af00;
+  cursor: pointer;
 }
 
 .logout{
   color:red;
+  text-shadow:1px 2px 3px #f0ec00;
+  cursor: pointer;
+}
+
+.adminbotton {
+  color: rgb(0, 255, 0);
+  text-shadow:1px 2px 3px #f00000;
+  cursor: pointer;
 }
 
 .left-mypage{
@@ -206,5 +231,7 @@ export default {
   width:200px;
   margin:0 30px 45px 0;
 }
+
+
 
 </style>

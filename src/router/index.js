@@ -8,6 +8,8 @@ import Thankyou from '../views/Thankyou.vue'
 import ReservationCompletion from '../views/ReservationCompletion.vue'
 import StoreDetail from '../views/StoreDetail.vue'
 import StoreList from '../views/StoreList.vue'
+import Admin from '../views/Admin.vue'
+import StoreAdmin from '../views/StoreAdmin.vue'
 import firebase from 'firebase'
 // /** storeデータ画像のコンポーネント */
 import store from '../store/index'
@@ -29,6 +31,22 @@ const routes = [
     path: '/logout',
     name: 'Logout',
     component: Logout,
+    meta: {
+      requiresAuth: true,
+    },
+  },
+  {
+    path: '/ENya3Admin/managementScreen',
+    name: 'Admin',
+    component: Admin,
+    meta: {
+      requiresAuth: true,
+    },
+  },
+  {
+    path: '/StoreAdmin',
+    name: 'StoreAdmin',
+    component: StoreAdmin,
     meta: {
       requiresAuth: true,
     },

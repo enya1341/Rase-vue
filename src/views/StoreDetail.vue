@@ -116,7 +116,7 @@ export default {
 
       const day = this.reservationData.date + " " + this.reservationData.time + ":00";
 
-      const QRdata = "店舗名:" + this.storedata.name + " 予約日:" + this.reservationData.date + " 予約時間:" + this.reservationData.time + " 予約人数:" + this.reservationData.number;
+      const QRdata = "user_ID:" + this.$store.state.user.id + "店舗名:" + this.storedata.name + " 予約日:" + this.reservationData.date + " 予約時間:" + this.reservationData.time + " 予約人数:" + this.reservationData.number;
 
       await axios.post(this.$store.state.host + "/api/v1/" + this.$route.params.id + "/reservations",{
         user_id: this.$store.state.user.id,

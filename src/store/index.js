@@ -20,10 +20,20 @@ export default new Vuex.Store({
       id: "",
       name: "",
       email: "",
-      password:""
+      password: "",
+      admin: null,
+      storeAdmin:null
+    },
+    storedata: {
+      id: "",
+      name: "",
+      region:"",
+      genre: "",
+      overview: "",
+      image:""
     },
     config: {
-        apiKey: "AIzaSyAfsdhyAod-oQWYRvmlo3GLg6vL7T9Noa8",
+        apiKey: process.env.VUE_APP_NOTLOCAL_APIKEY,
         authDomain: "rase-vue-production.firebaseapp.com",
         projectId: "rase-vue-production",
         storageBucket: "rase-vue-production.appspot.com",
@@ -43,6 +53,17 @@ export default new Vuex.Store({
     user(state, payload) {
       state.user = payload;
     },
+    password(state, payload) {
+      state.user.password = payload;
+    },
+    storedata(state, payload) {
+      state.storedata.id = payload.id;
+      state.storedata.name = payload.name;
+      state.storedata.region = payload.region;
+      state.storedata.genre = payload.genre;
+      state.storedata.overview = payload.overview;
+      state.storedata.image = payload.image;
+    },
     logout(state, payload) {
       state.auth = payload;
     },
@@ -53,29 +74,30 @@ export default new Vuex.Store({
       state.user.profile = payload;
     },
     hostChange(state) {
-      if (state.host==='http://127.0.0.1:8000') {
-        state.host = 'https://whispering-retreat-97645.herokuapp.com'
-        state.config = {
-          apiKey: "AIzaSyAfsdhyAod-oQWYRvmlo3GLg6vL7T9Noa8",
-          authDomain: "rase-vue-production.firebaseapp.com",
-          projectId: "rase-vue-production",
-          storageBucket: "rase-vue-production.appspot.com",
-          messagingSenderId: "296728946619",
-          appId: "1:296728946619:web:b0763b8bf1829348f1469e"
-        };
-      } else {
+      if (process.env.NODE_ENV === 'local' || process.env.NODE_ENV === 'development') {
         state.host = 'http://127.0.0.1:8000',
         state.config = {
-          apiKey: "AIzaSyAxIIs7Cxf9NSIWJmD_U0npi_phwIabtm8",
+          apiKey: process.env.VUE_APP_LOCAL_APIKEY,
           authDomain: "rase-vue.firebaseapp.com",
           databaseURL: "https://rase-vue-default-rtdb.firebaseio.com",
           projectId: "rase-vue",
           storageBucket: "rase-vue.appspot.com",
           messagingSenderId: "650383339554",
           appId: "1:650383339554:web:a30dd19bd934a3f2309a7b"
-        }
-      }
-      
+          }
+        console.log("localもしくは開発環境です")
+      } else if(process.env.NODE_ENV ==='production'){
+        state.host = 'https://whispering-retreat-97645.herokuapp.com'
+        state.config = {
+          apiKey: process.env.VUE_APP_NOTLOCAL_APIKEY,
+          authDomain: "rase-vue-production.firebaseapp.com",
+          projectId: "rase-vue-production",
+          storageBucket: "rase-vue-production.appspot.com",
+          messagingSenderId: "296728946619",
+          appId: "1:296728946619:web:b0763b8bf1829348f1469e"
+        };
+        console.log("本番環境です")
+      }  
     }
   },
   actions: {
@@ -107,7 +129,7 @@ export default new Vuex.Store({
       );
 
       commit("user", responseUser.data.data[0]);
-
+      commit("password", password);
       router.replace('/mypage');
 
     },
@@ -139,6 +161,6 @@ export default new Vuex.Store({
         commit('auth', true)
       })
 
-    }
+    },
   },
 });

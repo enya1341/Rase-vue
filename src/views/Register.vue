@@ -70,7 +70,7 @@ export default {
       .then(
         // 成功時の処理
         alert('会員登録に成功しました'),
-        this.$store.state.auth=true,
+        this.$store.commit('auth',true),
         this.error=false
       )
       .catch(
@@ -79,7 +79,7 @@ export default {
           alert(error);
           // commit('auth', false);
           // this.state.loginErrorMessage = true
-          this.$store.state.auth=false,
+          this.$store.commit('auth',false),
           this.error=true
         }
         // // エラー時の処理 
@@ -108,7 +108,7 @@ export default {
               params: {
                 email:this.email
               }
-        }).then((response) => {this.$store.state.user =response.data.data[0],console.log(response.data.data[0])})
+        }).then((response) => {this.$store.commit('user',response.data.data[0]),console.log(response.data.data[0])})
 
         // await axios.get(
         // this.$store.state.host + "/api/v1/users" ,

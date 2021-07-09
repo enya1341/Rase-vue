@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="box" >
+    <div class="box">
 
       <div class="head flex">
         <div class="leftflex">
@@ -11,9 +11,13 @@
       </div>
 
       <div class="reservation-data" v-if="!(this.QRauth)">
-        <div class="data">
+        <div class="data" v-if="!parentSwitch">
           <th>Shop</th>
           <td>{{this.parentReservationStoredata.name}}</td>
+        </div>
+        <div class="data" v-if="parentSwitch">
+          <th>UserID</th>
+          <td>{{this.parentReservationdata.reservations.user_id}}</td>
         </div>
         <div class="data">
           <th>Date</th>
@@ -39,7 +43,7 @@
           </td>
           
         </div>
-        <div class="data">
+        <div class="data" v-if="!parentSwitch">
           <th>評価</th>
           <td>
             <select class="value-select" v-model="value">
@@ -56,18 +60,18 @@
         <div>
           <th>{{this.errordata.message}}</th>
         </div>
-        <div class="data">
+        <div class="data" v-if="!parentSwitch">
           <th>QRコード:</th>
           <td>
             <button v-if="!(this.QRauth)" @click="QRopen">表示</button>
           </td>
         </div>
-        <button v-if="!(this.Changeauth)" class="reservation-change" @click="Changeopen">予約変更</button>
-        <button class = "reservation-change-false" v-if="this.Changeauth"  @click="reservation">変更適用</button>
-        <button class = "reservation-change-false" v-if="this.Changeauth"  @click="Changeclose">戻る</button>
+        <button v-if="!(this.Changeauth) && !parentSwitch" class="reservation-change" @click="Changeopen">予約変更</button>
+        <button class = "reservation-change-false" v-if="this.Changeauth && !parentSwitch"  @click="reservation">変更適用</button>
+        <button class = "reservation-change-false" v-if="this.Changeauth && !parentSwitch"  @click="Changeclose">戻る</button>
       </div>
 
-      <div class="reservation-data" v-if="this.QRauth">
+      <div class="reservation-data" v-if="this.QRauth && !parentSwitch">
         <VueQrcode class = "QRcode" v-if="this.QRauth" :value="this.parentReservationdata.reservations.QRcodeData" :options="option" tag="img"/>
 
         <button class = "QR-button" v-if="this.QRauth" @click="QRclose">閉じる</button>
@@ -87,7 +91,7 @@ import VueQrcode from "@chenfengyuan/vue-qrcode";
 
 export default {
   
-  props: ["parentReservationdata","parentReservationStoredata","parentIndex"],
+  props: ["parentReservationdata","parentReservationStoredata","parentIndex","parentSwitch"],
 
   components: {
     VueQrcode
@@ -134,7 +138,7 @@ export default {
 
       const day = this.reservationData.date + " " + this.reservationData.time + ":00";
 
-      const QRdata = "店舗名:" + this.parentReservationStoredata.name + " 予約日:" + this.reservationData.date + " 予約時間:" + this.reservationData.time + " 予約人数:" + this.reservationData.number;
+      const QRdata = "user_ID:" + this.$store.state.user.id + "店舗名:" + this.parentReservationStoredata.name + " 予約日:" + this.reservationData.date + " 予約時間:" + this.reservationData.time + " 予約人数:" + this.reservationData.number;
 
       await axios.put(this.$store.state.host + "/api/v1/" + this.parentReservationdata.reservations.store_id + "/reservations",{
         user_id: this.$store.state.user.id,
@@ -181,7 +185,7 @@ export default {
 
 .box {
   width:400px;
-  height:400px;
+  padding:10px;
   background-color: rgb(0, 106, 245);
   border-radius: 10px;
   box-shadow: 3px 3px 0 0 rgba(0, 34, 97, 0.5)

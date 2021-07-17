@@ -5,7 +5,6 @@
 
       <div class="top-box flex">
         <h1>Login</h1>
-        <p @click='change' class="change">環境切り替え</p>
       </div>
 
       <div class="buttom-box">

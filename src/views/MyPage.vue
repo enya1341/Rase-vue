@@ -3,8 +3,8 @@
     <div class="header-icon header-flex">
       <HeaderIcon/>
       <div class ="header-link flex">
-         <p @click="Admin" class = "adminbotton">管理者画面へ</p>
-         <p @click="StoreAdmin" class = "adminbotton">店舗管理者画面へ</p>
+         <p v-if="$store.state.user.admin === 1" @click="Admin" class = "adminbotton">管理者画面へ</p>
+         <p v-if="$store.state.user.storeAdmin === 1" @click="StoreAdmin" class = "adminbotton">店舗管理者画面へ</p>
         <p @click="StoreList" class="storelist">ストア一覧</p>
         <p @click="Logout" class="logout">ログアウト</p>
       </div>

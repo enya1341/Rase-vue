@@ -33,12 +33,30 @@
               <textarea type="text" v-if="storeAuth" v-model="storedata.overview" />
             </td>
           </div>
+          <div class="data" v-if="storeAuth">
+            <th>
+              <label for="imageIn">ファイル選択:</label>
+            </th>
+            <td>
+              <form>
+                <input type="file" id="imageIn" ref="file" name="imageIn" accept="image/jpeg, image/png, image/jpg" @change="onChangeImage">
+                <!-- <button @click="postImage">送信</button> -->
+              </form>
+            </td>
+          </div>
+          <div class="data" v-if="storedata.image">
+            <th>店舗画像:</th>
+            <td>
+              <img v-if="!storeAuth" :src="Storeimage(this.$store.state.storedata.image)" width="200px">
+              <img v-if="storeAuth" :src="this.imagedata.image" width="200px">
+            </td>
+          </div>
           <div class="flex">
-            <button v-if="!storeAuth && !this.$store.state.storedata.id" @click="storeAuthOn">店舗情報登録</button>
+            <button v-if="!storeAuth && !this.$store.state.user.storeAdmin_id" @click="storeAuthOn">店舗情報登録</button>
             <button v-if="!storeAuth" @click="storeAuthOn">店舗情報更新</button>
             <button v-if="storeAuth" @click="storeAuthOff">戻る</button>
-            <button v-if="storeAuth && !this.$store.state.storedata.id" @click="storeDataAdd">登録</button>
-            <button v-if="storeAuth && this.$store.state.storedata.id" @click="storeDataUpdate">更新</button>
+            <button v-if="storeAuth && !this.$store.state.user.storeAdmin_id" @click="storeDataAdd">登録</button>
+            <button v-if="storeAuth && this.$store.state.user.storeAdmin_id" @click="storeDataUpdate">更新</button>
           </div>
         </div>
         
@@ -72,12 +90,18 @@ export default {
         name:this.$store.state.storedata.name,
         region:this.$store.state.storedata.region,
         genre:this.$store.state.storedata.genre,
-        overview:this.$store.state.storedata.overview
+        overview:this.$store.state.storedata.overview,
+        image:this.$store.state.storedata.image
       },
       store:"",
       storeAuth:false,
       reservationdata:"",
-      sync:false
+      sync:false,
+      image:"",
+      imagedata:{
+        image:"",
+        name:"",
+      }
 
     }
   },
@@ -98,29 +122,69 @@ export default {
       this.storeAuth=false;
     },
 
+    /** 動的にrequireを機能させるための関数*/
+    Storeimage(imgURL){
+      return `https://rase-enya.s3.ap-northeast-1.amazonaws.com/${imgURL}`
+    },
+
+    //画像データが入る
+    onChangeImage: function(event) {
+      const files = this.$refs.file;
+      const fileImg = files.files[0];
+      this.storedata.image = event.target.files[0];
+      if (fileImg.type.startsWith("image/")) {
+        this.imagedata.image = window.URL.createObjectURL(fileImg);
+        this.imagedata.name = fileImg.name;
+        this.imagedata.type = fileImg.type;
+      }
+      console.log(this.storedata.image)
+      console.log(this.$store.state.storedata.image)
+    },
+
     async storeDataAdd(){
+      
+      const imagedata = new FormData();
+      imagedata.append("image", this.storedata.image);
+      const config = {headers: {'content-type': 'multipart/form-data'}}
 
       await axios.post(this.$store.state.host + "/api/v1/storeAdmin/stores",{
         name: this.storedata.name,
         region: this.storedata.region,
         genre: this.storedata.genre,
-        overview:this.storedata.overview
-      }).then((response) => {this.$store.commit('storedata',response.data.data[0])});
+        overview:this.storedata.overview,
+        email:this.$store.state.user.email
+      }).then((response) => {this.$store.commit('storedata',response.data.data[0]),this.$store.commit('user_store_id',response.data.storedata),console.log(response.data)});
+      
+      await axios.post(this.$store.state.host + "/api/v1/" + this.$store.state.user.storeAdmin_store_id + "/storeAdmin/stores/image",imagedata,config).then((response) => {this.$store.commit('image',response.data.data),console.log(response)})
 
-      if(this.$store.state.storedata.id){
+      if(this.$store.state.user.storeAdmin_store_id){
         this.storeAuth=false;
+        this.$router.go({path: this.$router.currentRoute.path, force: true})
       }
 
     },
 
     async storeDataUpdate(){
+      const imagedata = new FormData();
+      imagedata.append("image", this.storedata.image);
+      const config = {headers: {'content-type': 'multipart/form-data'}}
+      for (let value of imagedata.entries()) { 
+        console.log(value); 
+      }
+      console.log(imagedata)
 
       await axios.put(this.$store.state.host + "/api/v1/" + this.$store.state.storedata.id + "/storeAdmin/stores",{
         name: this.storedata.name,
         region: this.storedata.region,
         genre: this.storedata.genre,
-        overview:this.storedata.overview
+        overview:this.storedata.overview,
+        // imageUrl:this.$store.state.storedata.image
       }).then((response) => {this.$store.commit('storedata',response.data.data[0]),this.storeAuth=false});
+
+      console.log(this.$store.state.storedata.id)
+
+      await axios.post(this.$store.state.host + "/api/v1/" + this.$store.state.user.storeAdmin_store_id + "/storeAdmin/stores/image",imagedata,config).then((response) => {this.$store.commit('image',response.data.data)})
+      // this.$store.commit('image',this.imagedata.image)
     },
 
     async reservationdatain(){
@@ -182,6 +246,11 @@ export default {
   color:black;
   width:110px;
   text-align: left;
+}
+
+.data label{
+  color:black;
+  font-size:16px;
 }
 
 .storedatas{

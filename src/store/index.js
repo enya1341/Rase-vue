@@ -22,7 +22,8 @@ export default new Vuex.Store({
       email: "",
       password: "",
       admin: null,
-      storeAdmin:null
+      storeAdmin: null,
+      storeAdmin_store_id:null
     },
     storedata: {
       id: "",
@@ -51,7 +52,25 @@ export default new Vuex.Store({
       state.auth = payload;
     },
     user(state, payload) {
-      state.user = payload;
+      state.user.id = payload.id;
+      state.user.name = payload.name;
+      state.user.email = payload.email;
+      state.user.password = payload.password;
+      state.user.admin = payload.admin;
+      state.user.storeAdmin = payload.storeAdmin;
+      state.user.storeAdmin_store_id = payload.storeAdmin_store_id;
+    },
+    userset(state) {
+      state.user.id = "";
+      state.user.name = "";
+      state.user.email = "";
+      state.user.password = "";
+      state.user.admin = null;
+      state.user.storeAdmin = null;
+      state.user.storeAdmin_store_id = null;
+    },
+    user_store_id(state, payload) {
+      state.user.storeAdmin_store_id = payload;
     },
     password(state, payload) {
       state.user.password = payload;
@@ -64,6 +83,17 @@ export default new Vuex.Store({
       state.storedata.overview = payload.overview;
       state.storedata.image = payload.image;
     },
+    storedataReset(state) {
+      state.storedata.id = "";
+      state.storedata.name = "";
+      state.storedata.region = "";
+      state.storedata.genre = "";
+      state.storedata.overview = "";
+      state.storedata.image = "";
+    },
+    image(state, payload) {
+      state.storedata.image = payload;
+    },
     logout(state, payload) {
       state.auth = payload;
     },
@@ -75,7 +105,7 @@ export default new Vuex.Store({
     },
     hostChange(state) {
       if (process.env.NODE_ENV === 'local' || process.env.NODE_ENV === 'development') {
-        state.host = 'http://127.0.0.1:8000',
+        state.host = process.env.VUE_APP_API_BASE_URL,
         state.config = {
           apiKey: process.env.VUE_APP_LOCAL_APIKEY,
           authDomain: "rase-vue.firebaseapp.com",
@@ -86,8 +116,8 @@ export default new Vuex.Store({
           appId: "1:650383339554:web:a30dd19bd934a3f2309a7b"
           }
         console.log("localもしくは開発環境です")
-      } else if(process.env.NODE_ENV ==='production'){
-        state.host = 'https://whispering-retreat-97645.herokuapp.com'
+      } else if (process.env.NODE_ENV === 'production') {
+        state.host = process.env.VUE_APP_API_BASE_URL
         state.config = {
           apiKey: process.env.VUE_APP_NOTLOCAL_APIKEY,
           authDomain: "rase-vue-production.firebaseapp.com",
@@ -128,7 +158,20 @@ export default new Vuex.Store({
         }
       );
 
+      console.log(this.state)
       commit("user", responseUser.data.data[0]);
+
+      if (this.state.user.storeAdmin_store_id) {
+        const responseStore = await axios.get(
+          this.state.host + "/api/v1/" + this.state.user.storeAdmin_store_id + "/stores")
+        commit("storedata", responseStore.data.data[0]);
+      } else {
+        commit("storedataReset");
+        console.log("storestateを削除しました")
+      }
+
+      
+      
       commit("password", password);
       router.replace('/mypage');
 

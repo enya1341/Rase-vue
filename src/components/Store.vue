@@ -104,9 +104,8 @@ export  default{
     },
 
 
-    /** 動的にrequireを機能させるための関数*/
     Storeimage(imgURL){
-      return require(`../../public/store/${imgURL}`)
+      return `https://rase-enya.s3.ap-northeast-1.amazonaws.com/${imgURL}`
     },
 
     /** お気に入りデータが入っている時の処理。これで可否を行う*/

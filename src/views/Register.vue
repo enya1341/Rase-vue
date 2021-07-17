@@ -21,8 +21,8 @@
           <input placeholder="Password" type="password" v-model="password" />
         </div>
         <button @click="auth">登録</button>
-        <p v-if="emailError" class="errorLog">このメールアドレスは有効ではありません</p>
-        <p v-if="passwordError" class="errorLog">パスワードが6文字以下です</p>
+        <p v-if="emailError" class="errorLog">このメールアドレスは有効ではありません。</p>
+        <p v-if="passwordError" class="errorLog">パスワードが6文字以下です。</p>
         <p v-if="error" class="errorLog">会員登録に失敗しました</p>
         <!-- <p class="errorLog">{{this.check}}</p> -->
       </div>

@@ -77,6 +77,7 @@ export default {
         email: user.email,
         password: user.password
       });
+      this.$router.go({path: this.$router.currentRoute.path, force: true})
     },
 
     StoreAdminDelete(user){
@@ -85,6 +86,7 @@ export default {
         email: user.email,
         password: user.password
       });
+      this.$router.go({path: this.$router.currentRoute.path, force: true})
     },
 
 

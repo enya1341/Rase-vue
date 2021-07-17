@@ -99,6 +99,14 @@ const router = new VueRouter({
   routes
 })
 
+// router.beforeEach(function (transition) {
+//     if (transition.to.path === '/*') {
+//         window.location.href = '/404.html'
+//     } else {
+//         transition.next()
+//     }
+// });
+
 /** ナビゲーションガード*/
 router.beforeEach((to, from, next) => {
   if (

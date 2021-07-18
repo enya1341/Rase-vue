@@ -54,11 +54,11 @@
             </td>
           </div>
           <div class="flex">
-            <button v-if="!storeAuth && !this.$store.state.user.storeAdmin_id" @click="storeAuthOn">店舗情報登録</button>
+            <button v-if="!storeAuth && !this.$store.state.user.storeAdmin_store_id" @click="storeAuthOn">店舗情報登録</button>
             <button v-if="!storeAuth" @click="storeAuthOn">店舗情報更新</button>
             <button v-if="storeAuth" @click="storeAuthOff">戻る</button>
-            <button v-if="storeAuth && !this.$store.state.user.storeAdmin_id" @click="storeDataAdd">登録</button>
-            <button v-if="storeAuth && this.$store.state.user.storeAdmin_id" @click="storeDataUpdate">更新</button>
+            <button v-if="storeAuth && !this.$store.state.user.storeAdmin_store_id" @click="storeDataAdd">登録</button>
+            <button v-if="storeAuth && this.$store.state.user.storeAdmin_store_id" @click="storeDataUpdate">更新</button>
           </div>
         </div>
       </div>
@@ -188,10 +188,10 @@ export default {
         region: this.storedata.region,
         genre: this.storedata.genre,
         overview:this.storedata.overview,
-      }).then((response) => {this.$store.commit('storedata',response.data.data[0]),this.storeAuth=false});
+      }).then((response) => {this.$store.commit('storedata',response.data.data[0])});
 
       // 画像データをS3に送信してパスをDBにいれる Post
-      await axios.post(this.$store.state.host + "/api/v1/" + this.$store.state.user.storeAdmin_store_id + "/storeAdmin/stores/image",imagedata,config).then((response) => {this.$store.commit('image',response.data.data)})
+      await axios.post(this.$store.state.host + "/api/v1/" + this.$store.state.user.storeAdmin_store_id + "/storeAdmin/stores/image",imagedata,config).then((response) => {this.$store.commit('image',response.data.data),this.storeAuth=false})
     },
 
     async reservationdatain(){
@@ -235,6 +235,7 @@ export default {
   font-size:18px;
   cursor: pointer;
   color:yellow;
+  text-shadow:1px 2px 3px #f00000;
 }
 
 .left-storedata{

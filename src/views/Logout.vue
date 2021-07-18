@@ -1,6 +1,9 @@
 <template>
   <div id="thankyou">
-    <HeaderIcon/>
+    <div class="header-icon flex">
+      <HeaderIcon/>
+      <p @click="mypage">マイページへ</p>
+    </div>
     <div class="box">
       <h1>本当にログアウトしますか？</h1>
       <button @click="auth">ログアウト</button>
@@ -18,6 +21,11 @@ export default {
     HeaderIcon
   },
   methods: {
+
+    /** マイページに戻る */
+    mypage() {
+      this.$router.push("/mypage");
+    },
 
     /** ログアウト。その後ログインページに遷移*/
     auth() {
@@ -55,6 +63,22 @@ export default {
   text-align: center;
   margin-top:80px;
   color:black;
+}
+
+
+.flex {
+  display: flex;
+  justify-content: space-between;
+  width:90%;
+}
+
+.header-icon p{
+  margin-top:55px;
+  margin-left:60px;
+  font-size:18px;
+  cursor: pointer;
+  color:yellow;
+  text-shadow:1px 2px 3px #f00000;
 }
 
 button {

@@ -67,10 +67,10 @@ export default {
 
 
     /** 店舗代表者権限の付与 */
-    StoreAdminGrant(user){
+    async StoreAdminGrant(user){
 
       // 店舗代表者権限付与api put
-      axios.put(this.$store.state.host + "/api/v1/storeAdminGrant/users",{
+      await axios.put(this.$store.state.host + "/api/v1/storeAdminGrant/users",{
         name: user.name,
         email: user.email,
         password: user.password
@@ -80,10 +80,10 @@ export default {
     },
 
     /** 店舗代表者権限の削除 */
-    StoreAdminDelete(user){
+    async StoreAdminDelete(user){
 
       // 店舗代表者権限削除api put
-      axios.put(this.$store.state.host + "/api/v1/storeAdminDelete/users",{
+      await axios.put(this.$store.state.host + "/api/v1/storeAdminDelete/users",{
         name: user.name,
         email: user.email,
         password: user.password
@@ -125,6 +125,7 @@ export default {
   font-size:18px;
   cursor: pointer;
   color:yellow;
+  text-shadow:1px 2px 3px #f00000;
 }
 
 .box {

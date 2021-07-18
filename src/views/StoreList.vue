@@ -344,6 +344,7 @@ export default {
   font-size:18px;
   cursor: pointer;
   color:yellow;
+  text-shadow:1px 2px 3px #f00000;
 }
 
 .search-box{

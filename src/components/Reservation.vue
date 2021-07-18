@@ -144,8 +144,13 @@ export default {
 
     /** 予約変更機能。完了したら予約完了ページに遷移 */
     async reservation(){
+      if(this.parentReservationdata.time!==this.reservationData.time){
+        this.reservationData.time = this.reservationData.time + ":00";
+      }
+      
+      let day = this.reservationData.date + " " + this.reservationData.time;
 
-      const day = this.reservationData.date + " " + this.reservationData.time + ":00";
+
 
       const QRdata = "user_ID:" + this.$store.state.user.id + "店舗名:" + this.parentReservationStoredata.name + " 予約日:" + this.reservationData.date + " 予約時間:" + this.reservationData.time + " 予約人数:" + this.reservationData.number;
 

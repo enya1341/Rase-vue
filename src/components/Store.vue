@@ -1,9 +1,7 @@
 <template>
   <div id="store">
     <div class="box">
-
       <img :src="Storeimage(this.parentStore.image)">
-      <!-- <img :src="this.image"> -->
       <div class="bottom-box">
         <h1>{{this.parentStore.name}}</h1>
         <h3>#{{this.parentStore.region}} #{{this.parentStore.genre}}</h3>
@@ -52,7 +50,6 @@ export  default{
   mounted: function(){
     this.FavoriteGet();
     this.ValueGet();
-    console.log("mountedが実行されました")
   },
 
 
@@ -71,6 +68,7 @@ export  default{
       if(this.favorite===false){
         this.favorite=true;
 
+        // お気に入り追加api Post
         axios.post(this.$store.state.host + "/api/v1/" + this.$store.state.user.id + "/favorites",{
           store_id:this.parentStore.id
         }).then((response) => {this.reservation_id =response.data.data.id});
@@ -78,6 +76,7 @@ export  default{
       }else{
         this.favorite=false;
 
+        // お気に入り削除api Delete
         axios({
               method: "delete",
               url: this.$store.state.host + "/api/v1/"+this.$store.state.user.id+"/favorites",
@@ -89,7 +88,10 @@ export  default{
       }
     },
 
+    /**評価の取得。ただこれをストア毎に読み込んでるせいで重くなってるので修正案件（時間がありませんでした…）*/
     async ValueGet(){
+
+      // 評価取得api Get
       await axios.get(this.$store.state.host + "/api/v1/" + this.parentStore.id + "/values").then((response) => {this.valuedata =response.data.data})
 
       for(let i = 0;i < this.valuedata.length;i++){
@@ -103,7 +105,7 @@ export  default{
       
     },
 
-
+    /**DBから取ってきたパスから画像を呼び出せるように溶接する関数。S3から取得*/
     Storeimage(imgURL){
       return `https://rase-enya.s3.ap-northeast-1.amazonaws.com/${imgURL}`
     },

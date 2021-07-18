@@ -19,7 +19,7 @@ export default {
   },
   methods: {
 
-    /** ログアウト。ログインページに遷移*/
+    /** ログアウト。その後ログインページに遷移*/
     auth() {
       this.$store.dispatch("logout")
       this.$router.push("/");

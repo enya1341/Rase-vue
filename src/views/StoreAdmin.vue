@@ -1,6 +1,11 @@
 <template>
   <div id="StoreAdmin" v-if="sync || $store.state.user.storeAdmin === 1">
-    <HeaderIcon/>
+
+    <div class="header-icon flex">
+      <HeaderIcon/>
+      <p @click="mypage">マイページへ</p>
+    </div>
+
     <div class="flex">
       <div class="left-storedata">
         <h1 class="store-top">ストアの追加と更新</h1>
@@ -33,20 +38,17 @@
               <textarea type="text" v-if="storeAuth" v-model="storedata.overview" />
             </td>
           </div>
-          <div class="data" v-if="storeAuth">
+          <div class="data flex" v-if="storeAuth">
             <th>
               <label for="imageIn">ファイル選択:</label>
             </th>
-            <td>
-              <form>
-                <input type="file" id="imageIn" ref="file" name="imageIn" accept="image/jpeg, image/png, image/jpg" @change="onChangeImage">
-                <!-- <button @click="postImage">送信</button> -->
-              </form>
-            </td>
+            <form>
+              <input type="file" id="imageIn" ref="file" name="imageIn" accept="image/jpeg, image/png, image/jpg" @change="onChangeImage">
+            </form>
           </div>
-          <div class="data" v-if="storedata.image">
+          <div class="data">
             <th>店舗画像:</th>
-            <td>
+            <td v-if="storedata.image">
               <img v-if="!storeAuth" :src="Storeimage(this.$store.state.storedata.image)" width="200px">
               <img v-if="storeAuth" :src="this.imagedata.image" width="200px">
             </td>
@@ -59,8 +61,8 @@
             <button v-if="storeAuth && this.$store.state.user.storeAdmin_id" @click="storeDataUpdate">更新</button>
           </div>
         </div>
-        
       </div>
+      
       <div class="right-reservation">
         <h1 class="reservation-top">店舗予約情報</h1>
         <div class="reservationdata">
@@ -113,21 +115,27 @@ export default {
 
   methods: {
 
-    /** そのままログインページへ（ここはいつか修正) */
+    /** マイページに戻る */
+    mypage() {
+      this.$router.push("/mypage");
+    },
+
+    /** 店舗登録か更新をする際の画面切り替え用 開く*/
     storeAuthOn() {
       this.storeAuth=true;
     },
 
+    /** 店舗登録か更新をする際の画面切り替え用 閉じる*/
     storeAuthOff() {
       this.storeAuth=false;
     },
 
-    /** 動的にrequireを機能させるための関数*/
+    /** DBから取ってきたパスから画像呼び出せるように溶接する関数。S3から取得*/
     Storeimage(imgURL){
       return `https://rase-enya.s3.ap-northeast-1.amazonaws.com/${imgURL}`
     },
 
-    //画像データが入る
+    /**画像データが入った際に画像データを入れる*/
     onChangeImage: function(event) {
       const files = this.$refs.file;
       const fileImg = files.files[0];
@@ -137,59 +145,58 @@ export default {
         this.imagedata.name = fileImg.name;
         this.imagedata.type = fileImg.type;
       }
-      console.log(this.storedata.image)
-      console.log(this.$store.state.storedata.image)
     },
 
+    /**ストアを作成する*/
     async storeDataAdd(){
-      
+
+      // 画像を送れるように型を作る
       const imagedata = new FormData();
       imagedata.append("image", this.storedata.image);
       const config = {headers: {'content-type': 'multipart/form-data'}}
 
+      // ストアデータの送信。ユーザーデータにストアIDを送る Post
       await axios.post(this.$store.state.host + "/api/v1/storeAdmin/stores",{
         name: this.storedata.name,
         region: this.storedata.region,
         genre: this.storedata.genre,
         overview:this.storedata.overview,
         email:this.$store.state.user.email
-      }).then((response) => {this.$store.commit('storedata',response.data.data[0]),this.$store.commit('user_store_id',response.data.storedata),console.log(response.data)});
-      
-      await axios.post(this.$store.state.host + "/api/v1/" + this.$store.state.user.storeAdmin_store_id + "/storeAdmin/stores/image",imagedata,config).then((response) => {this.$store.commit('image',response.data.data),console.log(response)})
+      }).then((response) => {this.$store.commit('storedata',response.data.data[0]),this.$store.commit('user_store_id',response.data.storedata)});
 
+      // 画像データをS3に送信してパスをDBにいれる Post
+      await axios.post(this.$store.state.host + "/api/v1/" + this.$store.state.user.storeAdmin_store_id + "/storeAdmin/stores/image",imagedata,config).then((response) => {this.$store.commit('image',response.data.data)})
+
+      //データを入れられたらリロード
       if(this.$store.state.user.storeAdmin_store_id){
         this.storeAuth=false;
         this.$router.go({path: this.$router.currentRoute.path, force: true})
       }
-
     },
 
+    /**ストアを更新する*/
     async storeDataUpdate(){
+
+      // 画像を送れるように型を作る
       const imagedata = new FormData();
       imagedata.append("image", this.storedata.image);
-      const config = {headers: {'content-type': 'multipart/form-data'}}
-      for (let value of imagedata.entries()) { 
-        console.log(value); 
-      }
-      console.log(imagedata)
+      const config = {headers: {'content-type': 'multipart/form-data'}};
 
+      // ストアデータの更新 Put
       await axios.put(this.$store.state.host + "/api/v1/" + this.$store.state.storedata.id + "/storeAdmin/stores",{
         name: this.storedata.name,
         region: this.storedata.region,
         genre: this.storedata.genre,
         overview:this.storedata.overview,
-        // imageUrl:this.$store.state.storedata.image
       }).then((response) => {this.$store.commit('storedata',response.data.data[0]),this.storeAuth=false});
 
-      console.log(this.$store.state.storedata.id)
-
+      // 画像データをS3に送信してパスをDBにいれる Post
       await axios.post(this.$store.state.host + "/api/v1/" + this.$store.state.user.storeAdmin_store_id + "/storeAdmin/stores/image",imagedata,config).then((response) => {this.$store.commit('image',response.data.data)})
-      // this.$store.commit('image',this.imagedata.image)
     },
 
     async reservationdatain(){
 
-      //  予約データの取得
+      //  予約データの取得 Get
       await axios.get( this.$store.state.host + "/api/v1/" + this.$store.state.storedata.id + "/storeAdmin/reservations").then((response) => {this.reservationdata =response.data.data})
 
       //データの取得が完了したことを確認するためのスイッチ。しかし現状エラー内容になるので一時御遺徳
@@ -222,6 +229,14 @@ export default {
   flex-wrap :wrap;
 }
 
+.header-icon p{
+  margin-top:55px;
+  margin-left:60px;
+  font-size:18px;
+  cursor: pointer;
+  color:yellow;
+}
+
 .left-storedata{
   display: table;
   width:35%;
@@ -246,7 +261,9 @@ export default {
   color:black;
   width:110px;
   text-align: left;
+  vertical-align:top;
 }
+
 
 .data label{
   color:black;
@@ -261,6 +278,12 @@ export default {
   color:black;
   width:40%;
   text-align: left;
+}
+
+.data form{
+  color:black;
+  width:40%;
+  margin-left:60px;
 }
 
 .data input{

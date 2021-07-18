@@ -95,29 +95,30 @@ export default {
   
     /** ストアの詳細データを取得 */
     storedatain(){
+      //店舗詳細データ取得api get
       axios.get(this.$store.state.host  + "/api/v1/" + this.$route.params.id + "/stores").then((response) => {this.storedata =response.data.data[0]})
-
     },
 
-    /** 企業一覧ページに戻る */
+    /** ストア一覧ページに戻る */
     back(){
       this.$router.push({
         name: 'StoreList'
       })
     },
 
-    /** 動的にrequireを機能させるための関数*/
+    /** DBから取ってきたパスから画像を呼び出せるように溶接する関数。S3から取得*/
     Storeimage(imgURL){
-      return require(`../../public/store/${imgURL}`)
+      return `https://rase-enya.s3.ap-northeast-1.amazonaws.com/${imgURL}`
     },
 
-    /** 予約完了ページに戻る */
+    /** 予約を登録する */
     async reservation(){
 
       const day = this.reservationData.date + " " + this.reservationData.time + ":00";
 
       const QRdata = "user_ID:" + this.$store.state.user.id + "店舗名:" + this.storedata.name + " 予約日:" + this.reservationData.date + " 予約時間:" + this.reservationData.time + " 予約人数:" + this.reservationData.number;
 
+      //予約登録api Post
       await axios.post(this.$store.state.host + "/api/v1/" + this.$route.params.id + "/reservations",{
         user_id: this.$store.state.user.id,
         day: day,

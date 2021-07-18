@@ -1,6 +1,9 @@
 <template>
   <div id="admin" v-if="$store.state.user.admin === 1">
-    <HeaderIcon/>
+    <div class="header-icon flex">
+      <HeaderIcon/>
+      <p @click="mypage">マイページへ</p>
+    </div>
     <div class="box">
       <div class="flex top-users">
         <h1>ID:</h1>
@@ -28,6 +31,7 @@
 <script>
 /** Headerの会社ロゴのコンポーネント */
 import HeaderIcon from '@/components/HeaderIcon.vue'
+
 import axios from "axios";
 
 export default {
@@ -43,51 +47,52 @@ export default {
   },
   methods: {
 
-    /** そのままログインページへ（ここはいつか修正) */
-    auth() {
+    /** マイページに戻る */
+    mypage() {
       this.$router.push("/mypage");
     },
 
     /** ユーザーデータの取得 */
     userdatain(){
-      /** 全ユーザーデータの取得 */
+
+      /** 全ユーザーデータの取得api Get */
       axios.get(this.$store.state.host + "/api/v1/" + this.$store.state.user.email + "/users",{
         params:{
           password:this.$store.state.user.password
         }
       }).then((response) => {this.usersdata =response.data.data})
-      .catch(error => {
-        console.info(error.response)
-      })
-
-      // axios({
-      //         method: "get",
-      //         url: this.$store.state.host + "/api/v1/adminuserget/users",
-      //         params: {
-      //           store_id:this.parentStore.id
-      //         }
-      //   })
 
       this.sync=true
     },
 
+
+    /** 店舗代表者権限の付与 */
     StoreAdminGrant(user){
+
+      // 店舗代表者権限付与api put
       axios.put(this.$store.state.host + "/api/v1/storeAdminGrant/users",{
         name: user.name,
         email: user.email,
         password: user.password
       });
+
       this.$router.go({path: this.$router.currentRoute.path, force: true})
     },
 
+    /** 店舗代表者権限の削除 */
     StoreAdminDelete(user){
+
+      // 店舗代表者権限削除api put
       axios.put(this.$store.state.host + "/api/v1/storeAdminDelete/users",{
         name: user.name,
         email: user.email,
         password: user.password
       });
+
       this.$router.go({path: this.$router.currentRoute.path, force: true})
     },
+
+    
 
 
   },
@@ -112,6 +117,14 @@ export default {
 
 .flex {
   display: flex;
+}
+
+.header-icon p{
+  margin-top:55px;
+  margin-left:60px;
+  font-size:18px;
+  cursor: pointer;
+  color:yellow;
 }
 
 .box {

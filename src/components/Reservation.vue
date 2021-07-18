@@ -22,7 +22,6 @@
         <div class="data">
           <th>Date</th>
           <td v-if="!(this.Changeauth)">{{this.reservationData.date}}</td>
-          <!-- <td>{{this.parentReservationdata.reservations.id}}</td> -->
           <td v-if="this.Changeauth">
             <input class = "Change-input" type="date" v-model="reservationData.date" />
           </td>
@@ -33,7 +32,6 @@
           <td v-if="this.Changeauth">
             <input class = "Change-input" type="time" v-model="reservationData.time" />
           </td>
-          
         </div>
         <div class="data">
           <th>Number</th>
@@ -41,9 +39,8 @@
           <td v-if="this.Changeauth">
             <input class = "Change-input" type="number" v-model="reservationData.number" />
           </td>
-          
         </div>
-        <div class="data" v-if="!parentSwitch">
+        <div class="data" v-if="!parentSwitch && !(this.Changeauth)">
           <th>評価</th>
           <td>
             <select class="value-select" v-model="value">
@@ -60,7 +57,7 @@
         <div>
           <th>{{this.errordata.message}}</th>
         </div>
-        <div class="data" v-if="!parentSwitch">
+        <div class="data" v-if="!parentSwitch && !(this.Changeauth)">
           <th>QRコード:</th>
           <td>
             <button v-if="!(this.QRauth)" @click="QRopen">表示</button>
@@ -113,8 +110,11 @@ export default {
   
   methods:{
     
+
     /** 予約取り消し。とりあえず手動のみ*/
      async reservationClose(){
+
+      // 予約削除api Delete
        await axios({
               method: "delete",
               url: this.$store.state.host + "/api/v1/"+this.$store.state.user.id+"/reservations",
@@ -122,24 +122,34 @@ export default {
                 reservation_id: this.parentReservationdata.reservations.id
               }
         })
+
         this.$router.go()
     },
 
+
+    /** 評価機能 */
     valuedata(){
+
       const day = this.reservationData.date + " " + this.reservationData.time + ":00";
+
+      // 評価api Post
       axios.post(this.$store.state.host + "/api/v1/" + this.parentReservationStoredata.id + "/values",{
         user_id: this.$store.state.user.id,
         value:this.value,
         day:day
       }).then((response) => {this.errordata =response.data});
+
     },
 
+
+    /** 予約変更機能。完了したら予約完了ページに遷移 */
     async reservation(){
 
       const day = this.reservationData.date + " " + this.reservationData.time + ":00";
 
       const QRdata = "user_ID:" + this.$store.state.user.id + "店舗名:" + this.parentReservationStoredata.name + " 予約日:" + this.reservationData.date + " 予約時間:" + this.reservationData.time + " 予約人数:" + this.reservationData.number;
 
+      //  予約変更api put
       await axios.put(this.$store.state.host + "/api/v1/" + this.parentReservationdata.reservations.store_id + "/reservations",{
         user_id: this.$store.state.user.id,
         reservation_id:this.parentReservationdata.reservations.id,
@@ -148,28 +158,29 @@ export default {
         number:this.reservationData.number
       }).then((response) => {this.errordata =response.data});
 
-      
-
       if(!this.errordata.Error){
         this.$router.push({
         name: 'ReservationCompletion', params:{QRdata}
         })
       }
-
     },
 
+    /** QRコードを開くため関数 */
     QRopen() {
       this.QRauth = true;
     },
 
+    /** QRコードを閉じるため関数 */
     QRclose() {
       this.QRauth = false;
     },
 
+    /** 予約変更状態に移行する関数 */
     Changeopen(){
       this.Changeauth = true;
     },
 
+    /** 予約変更状態に終了する関数 */
     Changeclose(){
       this.Changeauth = false;
     }

@@ -115,7 +115,6 @@ export default new Vuex.Store({
           messagingSenderId: "650383339554",
           appId: "1:650383339554:web:a30dd19bd934a3f2309a7b"
           }
-        console.log("localもしくは開発環境です")
       } else if (process.env.NODE_ENV === 'production') {
         state.host = process.env.VUE_APP_API_BASE_URL
         state.config = {
@@ -126,7 +125,6 @@ export default new Vuex.Store({
           messagingSenderId: "296728946619",
           appId: "1:296728946619:web:b0763b8bf1829348f1469e"
         };
-        console.log("本番環境です")
       }  
     }
   },
@@ -158,39 +156,25 @@ export default new Vuex.Store({
         }
       );
 
-      console.log(this.state)
       commit("user", responseUser.data.data[0]);
 
       if (this.state.user.storeAdmin_store_id) {
+
+        // 自店舗を登録している場合のデータ取得
         const responseStore = await axios.get(
           this.state.host + "/api/v1/" + this.state.user.storeAdmin_store_id + "/stores")
         commit("storedata", responseStore.data.data[0]);
+
+
       } else {
         commit("storedataReset");
-        console.log("storestateを削除しました")
       }
-
-      
-      
       commit("password", password);
       router.replace('/mypage');
-
     },
     
     /** ログアウトの処理*/
     logout({ commit }) {
-
-      // // ログアウトの処理(api)
-      // axios
-      //   .post(this.state.host + "/api/v1/users/logout")
-      //   .then((response) => {
-      //     console.log(response);
-      //     commit("logout", response.data.auth);
-      //     router.replace("/");
-      //   })
-      //   .catch((error) => {
-      //     console.log(error);
-      //   });
       
       // ログアウトの処理(firebase)
       firebase.auth().signOut()

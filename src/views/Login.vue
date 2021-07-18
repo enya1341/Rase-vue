@@ -64,12 +64,14 @@ export default {
       }  
     },
 
+    /** 会員登録ページに遷移 */
     register() {
       this.$router.push({
         name: 'Register'
       })
     },
 
+    /** 最初ログインページを開いた際に本番環境かそれ以外の環境かでHOSTを変える */
     change(){
       this.$store.commit('hostChange')
     }
@@ -79,7 +81,10 @@ export default {
   created() {
     this.change();
   },
+
   watch: {
+
+    // メールアドレスのバリデーション
     email: function () {
       var re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
       if(re.test(this.email)){
@@ -88,6 +93,8 @@ export default {
         return this.check=false;
       } 
     },
+
+    //パスワードのバリデーション
     password: function(){
       if(this.password.length<7){
         return this.passwordError=true;

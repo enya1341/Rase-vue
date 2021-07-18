@@ -137,21 +137,26 @@ export default {
 
     /** ストアデータの取得 */
      storedatain(){
-       /** 全ストアデータの取得 */
+       /** 全ストアデータの取得 Get*/
        axios.get(this.$store.state.host + "/api/v1/stores").then((response) => {this.storedata =response.data.data})
-       /** お気に入りデータを取得 */
+       /** お気に入りデータを取得 Get*/
        axios.get(this.$store.state.host + "/api/v1/" + this.$store.state.user.id + "/favorites").then((response) => {this.favoritedata =response.data.data})
 
         this.sync=true
       },
-    /** ストア詳細ページに遷移*/
+
+    /** マイページに遷移*/
       mypage(){
         this.$router.push({
         name: 'MyPage'
         })
       },
 
-    /** 検索機能*/
+    //---------------------------------------------------------------//
+    //--------------------------検索機能-----------------------------//
+    //---------------------------------------------------------------//
+
+      //エリア検索のスイッチ。エリアの検索を始めたら他の検索は中断
       Area(){
         if(this.areaAuth===false){
           this.searchAreaModel=""
@@ -166,11 +171,12 @@ export default {
         }
       },
 
+      //エリア検索の予測変換がクリックされたら検索欄に代入
       SearchArea(area){
         this.searchAreaModel=area;
       },
 
-
+      //ジャンル検索のスイッチ。ジャンルの検索を始めたら他の検索は中断
       Genre(){
         if(this.genreAuth===false){
           this.searchGenreModel=""
@@ -185,10 +191,12 @@ export default {
         }
       },
 
+      //ジャンル検索の予測変換がクリックされたら検索欄に代入
       SearchGenre(genre){
         this.searchGenreModel=genre;
       },
 
+      //店舗名検索のスイッチ。店舗名の検索を始めたら他の検索は中断
       Name(){
         if(this.nameAuth===false){
           this.nameAuth=true
@@ -202,6 +210,7 @@ export default {
         }
       },
 
+      //店舗名検索の予測変換がクリックされたら検索欄に代入
       SearchName(name){
         this.searchNameModel=name;
       },
@@ -209,9 +218,10 @@ export default {
 
   },
 
-  /** 検索機能*/
+  // 検索機能の絞り込み
   computed: {
 
+    // エリア検索での予測変換絞り込み
     filteredArea() {
       const areaArray = [];
       for (const i in this.searcharea) {
@@ -223,6 +233,7 @@ export default {
       return areaArray;
     },
 
+    // ジャンル検索での予測変換絞り込み
     filteredGenre() {
       const genreArray = [];
       for (const i in this.searchgenre) {
@@ -234,6 +245,7 @@ export default {
       return genreArray;
     },
 
+    // 店舗名検索での予測変換絞り込み
     filteredName() {
       const nameArray = [];
       for (const i in this.storedata) {
@@ -245,6 +257,7 @@ export default {
       return nameArray;
     },
 
+    // 検索で一致したストアを絞り込み
     filteredStoredata() {
       const storedataArray = [];
       for (const i in this.storedata) {
@@ -260,9 +273,10 @@ export default {
 
   },
 
-/** 検索機能*/
+  // 予測変換タブ開き閉じ
   watch: {
 
+    //エリアの検索欄がデフォルト以外なら予測変換タブを開く
     searchAreaModel: function () {
       if(this.searchAreaModel === "ALL area"|| this.searchAreaModel === ""){
         this.storeAuth=false;
@@ -271,6 +285,7 @@ export default {
       }
     },
 
+    //ジャンルの検索欄がデフォルト以外なら予測変換タブを開く
     searchGenreModel: function () {
       if(this.searchGenreModel === "ALL genre" || this.searchGenreModel === ""){
         this.storeAuth=false;
@@ -279,6 +294,7 @@ export default {
       }
     },
 
+    //店舗名の検索欄がデフォルト以外なら予測変換タブを開く
     searchNameModel: function () {
       if(this.searchNameModel === ""){
         this.storeAuth=false;

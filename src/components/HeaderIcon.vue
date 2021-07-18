@@ -1,36 +1,16 @@
 <template>
 <div id="rase-icon">
-  <div class="RaseIcon" @click="mypage">
+  <div class="RaseIcon">
     <span></span>
     <span></span>
     <span></span>
   </div>
-  <h1 @click="storelist">Rase</h1>
-  <!-- <h1>{{this.$store.state.auth}}</h1>
-  <h1>{{this.$store.state.config.projectId}}</h1> -->
+  <h1>Rase</h1>
 </div>
 
 
 </template>
 
-<script>
-export  default{
-  methods:{
-    /** テスト用のページ移動。一々ページ遷移面倒だったので */
-    mypage(){
-      this.$router.push({
-        name: 'MyPage',
-      })
-    },
-    storelist(){
-      this.$router.push({
-        name: 'StoreList',
-      })
-    },
-
-  }
-}
-</script>
 
 
 <style scoped>

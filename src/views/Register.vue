@@ -24,7 +24,6 @@
         <p v-if="emailError" class="errorLog">このメールアドレスは有効ではありません。</p>
         <p v-if="passwordError" class="errorLog">パスワードが6文字以下です。</p>
         <p v-if="error" class="errorLog">会員登録に失敗しました</p>
-        <!-- <p class="errorLog">{{this.check}}</p> -->
       </div>
 
     </div>
@@ -77,65 +76,57 @@ export default {
         error => {
           // エラー時の処理 
           alert(error);
-          // commit('auth', false);
-          // this.state.loginErrorMessage = true
           this.$store.commit('auth',false),
           this.error=true
-        }
-        // // エラー時の処理 
-        // alert('会員登録に失敗しました'),
-        
+        }   
       )
 
+      // firebaseの認証とバリデーションが大丈夫だったらDB側に会員登録処理
       if(this.check===true && this.$store.state.auth===true){
+
+        // 会員登録api post
         await axios
         .post(this.$store.state.host + "/api/v1/users/registration", {
           name: this.name,
           email: this.email,
           password: this.password
         })
-        .then(response => {
-          console.log(response);
-          this.$router.push("/thankyou");
-        })
         .catch(error => {
           alert(error);
         });
 
+        // 登録したuser情報を取得するapi Get
         await axios({
               method: "get",
               url: this.$store.state.host + "/api/v1/users",
               params: {
                 email:this.email
               }
-        }).then((response) => {this.$store.commit('user',response.data.data[0]),console.log(response.data.data[0])})
+        }).then((response) => {this.$store.commit('user',response.data.data[0])})
 
-        // await axios.get(
-        // this.$store.state.host + "/api/v1/users" ,
-        // {
-        //   params: this.email
-        // }
-        // ).then((response) => {this.$store.state.user =response.data.data[0],console.log(response.data.data[0])})
-        this.emailError=false;
+        this.$router.push("/thankyou");
       }
       else{
         this.emailError=true;
       }
 
     }
-
-
   },
+
+  // 会員登録時のバリデーション
   watch: {
+
+    // メールのバリデーション
     email: function () {
       var re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
       if(re.test(this.email)){
         return this.check=true;
       }else{
         return this.check=false;
-      }
-      
+      }  
     },
+
+    // パスワードのバリデーション
     password: function(){
       if(this.password.length<7){
         return this.passwordError=true;

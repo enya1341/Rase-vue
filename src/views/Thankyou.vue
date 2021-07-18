@@ -19,7 +19,7 @@ export default {
   },
   methods: {
 
-    /** そのままログインページへ（ここはいつか修正) */
+    /** そのままマイページへ */
     auth() {
       this.$router.push("/mypage");
     }

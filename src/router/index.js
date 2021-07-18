@@ -99,15 +99,7 @@ const router = new VueRouter({
   routes
 })
 
-// router.beforeEach(function (transition) {
-//     if (transition.to.path === '/*') {
-//         window.location.href = '/404.html'
-//     } else {
-//         transition.next()
-//     }
-// });
-
-/** ナビゲーションガード*/
+/** firebase利用のナビゲーションガード*/
 router.beforeEach((to, from, next) => {
   if (
     to.matched.some((record) => record.meta.requiresAuth)
@@ -116,7 +108,7 @@ router.beforeEach((to, from, next) => {
       if (user  && store.state.auth) {
         next()
       } else {
-        // 認証されていない場合、認証画面へ
+        // 認証されていない場合、ログイン画面へ
         next(
           {
             name: 'Login', query: { redirect: to.fullPath, }

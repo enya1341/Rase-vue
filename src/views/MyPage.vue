@@ -9,6 +9,7 @@
         <p @click="Logout" class="logout">ログアウト</p>
       </div>
     </div>
+
     <div class="flex">
       <div class="left-mypage">
         <p>予約状況</p>
@@ -27,7 +28,6 @@
       </div>
     </div>
    
-    
   </div>
 </template>
 
@@ -62,23 +62,20 @@ export default {
     Reservation
   },
 
-    // --------------------- //
-    //     データの取得      //
-    // --------------------- //
   methods: {
 
     /** お気に入り機能のデータ取得 */
      async favoritesStoredatain(){
 
-      //  お気に入りデータの取得
+      //  お気に入りデータの取得 Get
       await axios.get( this.$store.state.host + "/api/v1/" + this.$store.state.user.id + "/favorites").then((response) => {this.favoritedata =response.data.data})
-      console.log('お気に入りデータが入れられました')
 
-      //  取得したお気に入りデータからストアデータを取得
+      //  取得したお気に入りデータからストアデータを取得 Get
       for(let n = 0; n < this.favoritedata.length; n++){
         await axios.get(this.$store.state.host + "/api/v1/" + this.favoritedata[n].store_id + "/stores").then((response) => {this.storedata[n] =response.data.data[0]})
-        console.log(this.storedata[n])
+
       }
+
       //  データの取得が完了したことを確認するためのスイッチ
       this.sync=true
       
@@ -87,18 +84,19 @@ export default {
     /** 予約機能のデータ取得 */
     async reservationdatain(){
 
-      //  予約データの取得
+      //  予約データの取得 Get
       await axios.get( this.$store.state.host + "/api/v1/" + this.$store.state.user.id + "/reservations").then((response) => {this.reservationdata =response.data.data})
 
-      //  取得した予約データからストアデータを取得
+      //  取得した予約データからストアデータを取得 Get
       for(let i = 0; i < this.reservationdata.length; i++){
         await axios.get(this.$store.state.host + "/api/v1/" + this.reservationdata[i].reservations.store_id + "/stores").then((response) => {this.reservationStoredata[i] =response.data.data[0]})
       }
-      //データの取得が完了したことを確認するためのスイッチ。しかし現状エラー内容になるので一時御遺徳
+
+      //データの取得が完了したことを確認するためのスイッチ
       this.sync2=true
     },
 
-    /** ストア詳細ページに遷移*/
+    /** ストア一覧ページに遷移*/
     StoreList(){
       this.$router.push({
         name: 'StoreList'
@@ -126,16 +124,6 @@ export default {
       })
     },
 
-  },
-
-  /** データ取得の確認 */
-  watch: {
-    favoritedata: function () {
-      console.log('お気に入りデータが入れられました 監視')
-    },
-    reservationdata: function () {
-      console.log('予約データが入れられました　監視')
-    },
   },
 
  created() {
